@@ -1,0 +1,65 @@
+{
+  "kind": "collectionType",
+  "collectionName": "leads",
+  "info": {
+    "singularName": "lead",
+    "pluralName": "leads",
+    "displayName": "Lead"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "userType": {
+      "type": "string"
+    },
+    "firstname": {
+      "type": "string"
+    },
+    "lastname": {
+      "type": "string"
+    },
+    "province": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "telephone": {
+      "type": "string"
+    },
+    "privacy": {
+      "type": "boolean"
+    },
+    "lead_source": {
+      "type": "string"
+    },
+    "deal_advance": {
+      "type": "string"
+    },
+    "deal_duration": {
+      "type": "string"
+    },
+    "deal_price": {
+      "type": "float"
+    },
+    "car_type": {
+      "type": "json"
+    },
+    "car_make": {
+      "type": "json"
+    },
+    "store": {
+      "type": "string"
+    },
+    "vehicle": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::vehicle.vehicle"
+    }
+  }
+}
