@@ -4,7 +4,8 @@
   "info": {
     "singularName": "store",
     "pluralName": "stores",
-    "displayName": "Store"
+    "displayName": "Store",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -22,6 +23,12 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::vehicle.vehicle",
+      "mappedBy": "store"
+    },
+    "users": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::users-permissions.user",
       "mappedBy": "store"
     }
   }
