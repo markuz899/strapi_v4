@@ -10,6 +10,12 @@
       "action": "api::store.store.findOne"
     },
     {
+      "action": "api::utils.utils.getCity"
+    },
+    {
+      "action": "api::utils.utils.getProvince"
+    },
+    {
       "action": "api::vehicle.vehicle.find"
     },
     {

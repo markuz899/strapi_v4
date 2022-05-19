@@ -1,26 +1,24 @@
-"use strict";
-
-/**
- * vehicle router.
- */
-
-const { createCoreRouter } = require("@strapi/strapi").factories;
-
-module.exports = createCoreRouter("api::vehicle.vehicle", {
-  prefix: "/:store",
-  only: ["find", "findOne"],
-  except: [],
-  config: {
-    find: {
-      auth: false,
-      middlewares: [],
+module.exports = {
+  routes: [
+    {
+      method: "GET",
+      path: "/:store/vehicles",
+      handler: "vehicle.find",
     },
-    findOne: {
-      auth: false,
-      middlewares: [],
+    {
+      method: "GET",
+      path: "/:store/vehicles/:make/:model/:slug",
+      handler: "vehicle.findOne",
     },
-    create: {},
-    update: {},
-    delete: {},
-  },
-});
+    {
+      method: "GET",
+      path: "/:store/vehicles/:make",
+      handler: "vehicle.findMake",
+    },
+    {
+      method: "GET",
+      path: "/:store/vehicles/:make/:model",
+      handler: "vehicle.findMakeModel",
+    },
+  ],
+};

@@ -5,6 +5,195 @@
   "permissions": [
     {
       "action": "plugin::content-manager.explorer.create",
+      "subject": "api::category.category",
+      "properties": {
+        "fields": [
+          "name",
+          "label",
+          "slug",
+          "vehicles"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.delete",
+      "subject": "api::category.category",
+      "properties": {},
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.publish",
+      "subject": "api::category.category",
+      "properties": {},
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.read",
+      "subject": "api::category.category",
+      "properties": {
+        "fields": [
+          "name",
+          "label",
+          "slug",
+          "vehicles"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.update",
+      "subject": "api::category.category",
+      "properties": {
+        "fields": [
+          "name",
+          "label",
+          "slug",
+          "vehicles"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.create",
+      "subject": "api::lead.lead",
+      "properties": {
+        "fields": [
+          "userType",
+          "firstname",
+          "lastname",
+          "province",
+          "city",
+          "email",
+          "telephone",
+          "privacy",
+          "lead_source",
+          "deal_advance",
+          "deal_duration",
+          "deal_price",
+          "car_type",
+          "car_make",
+          "store",
+          "vehicle"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.delete",
+      "subject": "api::lead.lead",
+      "properties": {},
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.publish",
+      "subject": "api::lead.lead",
+      "properties": {},
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.read",
+      "subject": "api::lead.lead",
+      "properties": {
+        "fields": [
+          "userType",
+          "firstname",
+          "lastname",
+          "province",
+          "city",
+          "email",
+          "telephone",
+          "privacy",
+          "lead_source",
+          "deal_advance",
+          "deal_duration",
+          "deal_price",
+          "car_type",
+          "car_make",
+          "store",
+          "vehicle"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.update",
+      "subject": "api::lead.lead",
+      "properties": {
+        "fields": [
+          "userType",
+          "firstname",
+          "lastname",
+          "province",
+          "city",
+          "email",
+          "telephone",
+          "privacy",
+          "lead_source",
+          "deal_advance",
+          "deal_duration",
+          "deal_price",
+          "car_type",
+          "car_make",
+          "store",
+          "vehicle"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.create",
+      "subject": "api::make.make",
+      "properties": {
+        "fields": [
+          "name",
+          "slug",
+          "image",
+          "vehicles"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.delete",
+      "subject": "api::make.make",
+      "properties": {},
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.publish",
+      "subject": "api::make.make",
+      "properties": {},
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.read",
+      "subject": "api::make.make",
+      "properties": {
+        "fields": [
+          "name",
+          "slug",
+          "image",
+          "vehicles"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.update",
+      "subject": "api::make.make",
+      "properties": {
+        "fields": [
+          "name",
+          "slug",
+          "image",
+          "vehicles"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.create",
       "subject": "api::store.store",
       "properties": {
         "fields": [
@@ -53,6 +242,54 @@
     },
     {
       "action": "plugin::content-manager.explorer.create",
+      "subject": "api::type.type",
+      "properties": {
+        "fields": [
+          "name",
+          "slug",
+          "vehicles"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.delete",
+      "subject": "api::type.type",
+      "properties": {},
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.publish",
+      "subject": "api::type.type",
+      "properties": {},
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.read",
+      "subject": "api::type.type",
+      "properties": {
+        "fields": [
+          "name",
+          "slug",
+          "vehicles"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.update",
+      "subject": "api::type.type",
+      "properties": {
+        "fields": [
+          "name",
+          "slug",
+          "vehicles"
+        ]
+      },
+      "conditions": []
+    },
+    {
+      "action": "plugin::content-manager.explorer.create",
       "subject": "api::vehicle.vehicle",
       "properties": {
         "fields": [
@@ -61,8 +298,10 @@
           "price",
           "slug",
           "store",
+          "model",
+          "category",
           "make",
-          "model"
+          "type"
         ]
       },
       "conditions": []
@@ -89,8 +328,10 @@
           "price",
           "slug",
           "store",
+          "model",
+          "category",
           "make",
-          "model"
+          "type"
         ]
       },
       "conditions": []
@@ -105,8 +346,10 @@
           "price",
           "slug",
           "store",
+          "model",
+          "category",
           "make",
-          "model"
+          "type"
         ]
       },
       "conditions": []

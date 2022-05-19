@@ -19,7 +19,7 @@
       "type": "string"
     },
     "price": {
-      "type": "decimal"
+      "type": "float"
     },
     "slug": {
       "type": "uid",
@@ -51,6 +51,77 @@
       "relation": "manyToOne",
       "target": "api::type.type",
       "inversedBy": "vehicles"
+    },
+    "quantity": {
+      "type": "integer"
+    },
+    "engine": {
+      "type": "string"
+    },
+    "power": {
+      "type": "string"
+    },
+    "doors": {
+      "type": "integer"
+    },
+    "seats": {
+      "type": "integer"
+    },
+    "transmission": {
+      "type": "string"
+    },
+    "width": {
+      "type": "string"
+    },
+    "height": {
+      "type": "string"
+    },
+    "long": {
+      "type": "string"
+    },
+    "services": {
+      "type": "json"
+    },
+    "equipment": {
+      "type": "string"
+    },
+    "optionals": {
+      "type": "string"
+    },
+    "promptDelivery": {
+      "type": "boolean"
+    },
+    "superOffert": {
+      "type": "boolean"
+    },
+    "powerSupply": {
+      "type": "string"
+    },
+    "battery": {
+      "type": "string"
+    },
+    "luggageRack": {
+      "type": "string"
+    },
+    "weight": {
+      "type": "integer"
+    },
+    "optionsDeal": {
+      "type": "json"
+    },
+    "deals": {
+      "type": "json"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
     }
   }
 }

@@ -91,20 +91,6 @@
           "sortable": true
         }
       },
-      "make": {
-        "edit": {
-          "label": "make",
-          "description": "",
-          "placeholder": "",
-          "visible": true,
-          "editable": true
-        },
-        "list": {
-          "label": "make",
-          "searchable": true,
-          "sortable": true
-        }
-      },
       "model": {
         "edit": {
           "label": "model",
@@ -115,6 +101,51 @@
         },
         "list": {
           "label": "model",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "category": {
+        "edit": {
+          "label": "category",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true,
+          "mainField": "name"
+        },
+        "list": {
+          "label": "category",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "make": {
+        "edit": {
+          "label": "make",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true,
+          "mainField": "name"
+        },
+        "list": {
+          "label": "make",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "type": {
+        "edit": {
+          "label": "type",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true,
+          "mainField": "name"
+        },
+        "list": {
+          "label": "type",
           "searchable": true,
           "sortable": true
         }
@@ -178,17 +209,16 @@
         ],
         [
           {
-            "name": "make",
-            "size": 6
-          },
-          {
             "name": "model",
             "size": 6
           }
         ]
       ],
       "editRelations": [
-        "store"
+        "store",
+        "category",
+        "make",
+        "type"
       ]
     }
   },

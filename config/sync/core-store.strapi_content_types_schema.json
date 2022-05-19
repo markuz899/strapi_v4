@@ -1347,6 +1347,400 @@
       "plugin": "users-permissions",
       "globalId": "UsersPermissionsUser"
     },
+    "api::category.category": {
+      "kind": "collectionType",
+      "collectionName": "categories",
+      "info": {
+        "singularName": "category",
+        "pluralName": "categories",
+        "displayName": "Category",
+        "description": ""
+      },
+      "options": {
+        "draftAndPublish": true
+      },
+      "pluginOptions": {},
+      "attributes": {
+        "name": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "uid",
+          "targetField": "name"
+        },
+        "vehicles": {
+          "type": "relation",
+          "relation": "oneToMany",
+          "target": "api::vehicle.vehicle",
+          "mappedBy": "category"
+        },
+        "createdAt": {
+          "type": "datetime"
+        },
+        "updatedAt": {
+          "type": "datetime"
+        },
+        "publishedAt": {
+          "type": "datetime",
+          "configurable": false,
+          "writable": true,
+          "visible": false
+        },
+        "createdBy": {
+          "type": "relation",
+          "relation": "oneToOne",
+          "target": "admin::user",
+          "configurable": false,
+          "writable": false,
+          "visible": false,
+          "useJoinTable": false,
+          "private": true
+        },
+        "updatedBy": {
+          "type": "relation",
+          "relation": "oneToOne",
+          "target": "admin::user",
+          "configurable": false,
+          "writable": false,
+          "visible": false,
+          "useJoinTable": false,
+          "private": true
+        }
+      },
+      "__schema__": {
+        "collectionName": "categories",
+        "info": {
+          "singularName": "category",
+          "pluralName": "categories",
+          "displayName": "Category",
+          "description": ""
+        },
+        "options": {
+          "draftAndPublish": true
+        },
+        "pluginOptions": {},
+        "attributes": {
+          "name": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "uid",
+            "targetField": "name"
+          },
+          "vehicles": {
+            "type": "relation",
+            "relation": "oneToMany",
+            "target": "api::vehicle.vehicle",
+            "mappedBy": "category"
+          }
+        },
+        "kind": "collectionType"
+      },
+      "modelType": "contentType",
+      "modelName": "category",
+      "connection": "default",
+      "uid": "api::category.category",
+      "apiName": "category",
+      "globalId": "Category",
+      "actions": {},
+      "lifecycles": {}
+    },
+    "api::lead.lead": {
+      "kind": "collectionType",
+      "collectionName": "leads",
+      "info": {
+        "singularName": "lead",
+        "pluralName": "leads",
+        "displayName": "Lead"
+      },
+      "options": {
+        "draftAndPublish": true
+      },
+      "pluginOptions": {},
+      "attributes": {
+        "userType": {
+          "type": "string"
+        },
+        "firstname": {
+          "type": "string"
+        },
+        "lastname": {
+          "type": "string"
+        },
+        "province": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "telephone": {
+          "type": "string"
+        },
+        "privacy": {
+          "type": "boolean"
+        },
+        "lead_source": {
+          "type": "string"
+        },
+        "deal_advance": {
+          "type": "string"
+        },
+        "deal_duration": {
+          "type": "string"
+        },
+        "deal_price": {
+          "type": "float"
+        },
+        "car_type": {
+          "type": "json"
+        },
+        "car_make": {
+          "type": "json"
+        },
+        "store": {
+          "type": "string"
+        },
+        "vehicle": {
+          "type": "relation",
+          "relation": "oneToOne",
+          "target": "api::vehicle.vehicle"
+        },
+        "createdAt": {
+          "type": "datetime"
+        },
+        "updatedAt": {
+          "type": "datetime"
+        },
+        "publishedAt": {
+          "type": "datetime",
+          "configurable": false,
+          "writable": true,
+          "visible": false
+        },
+        "createdBy": {
+          "type": "relation",
+          "relation": "oneToOne",
+          "target": "admin::user",
+          "configurable": false,
+          "writable": false,
+          "visible": false,
+          "useJoinTable": false,
+          "private": true
+        },
+        "updatedBy": {
+          "type": "relation",
+          "relation": "oneToOne",
+          "target": "admin::user",
+          "configurable": false,
+          "writable": false,
+          "visible": false,
+          "useJoinTable": false,
+          "private": true
+        }
+      },
+      "__schema__": {
+        "collectionName": "leads",
+        "info": {
+          "singularName": "lead",
+          "pluralName": "leads",
+          "displayName": "Lead"
+        },
+        "options": {
+          "draftAndPublish": true
+        },
+        "pluginOptions": {},
+        "attributes": {
+          "userType": {
+            "type": "string"
+          },
+          "firstname": {
+            "type": "string"
+          },
+          "lastname": {
+            "type": "string"
+          },
+          "province": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "telephone": {
+            "type": "string"
+          },
+          "privacy": {
+            "type": "boolean"
+          },
+          "lead_source": {
+            "type": "string"
+          },
+          "deal_advance": {
+            "type": "string"
+          },
+          "deal_duration": {
+            "type": "string"
+          },
+          "deal_price": {
+            "type": "float"
+          },
+          "car_type": {
+            "type": "json"
+          },
+          "car_make": {
+            "type": "json"
+          },
+          "store": {
+            "type": "string"
+          },
+          "vehicle": {
+            "type": "relation",
+            "relation": "oneToOne",
+            "target": "api::vehicle.vehicle"
+          }
+        },
+        "kind": "collectionType"
+      },
+      "modelType": "contentType",
+      "modelName": "lead",
+      "connection": "default",
+      "uid": "api::lead.lead",
+      "apiName": "lead",
+      "globalId": "Lead",
+      "actions": {},
+      "lifecycles": {}
+    },
+    "api::make.make": {
+      "kind": "collectionType",
+      "collectionName": "makes",
+      "info": {
+        "singularName": "make",
+        "pluralName": "makes",
+        "displayName": "Make",
+        "description": ""
+      },
+      "options": {
+        "draftAndPublish": true
+      },
+      "pluginOptions": {},
+      "attributes": {
+        "name": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "uid",
+          "targetField": "name"
+        },
+        "image": {
+          "type": "media",
+          "multiple": false,
+          "required": false,
+          "allowedTypes": [
+            "images",
+            "files",
+            "videos",
+            "audios"
+          ]
+        },
+        "vehicles": {
+          "type": "relation",
+          "relation": "oneToMany",
+          "target": "api::vehicle.vehicle",
+          "mappedBy": "make"
+        },
+        "createdAt": {
+          "type": "datetime"
+        },
+        "updatedAt": {
+          "type": "datetime"
+        },
+        "publishedAt": {
+          "type": "datetime",
+          "configurable": false,
+          "writable": true,
+          "visible": false
+        },
+        "createdBy": {
+          "type": "relation",
+          "relation": "oneToOne",
+          "target": "admin::user",
+          "configurable": false,
+          "writable": false,
+          "visible": false,
+          "useJoinTable": false,
+          "private": true
+        },
+        "updatedBy": {
+          "type": "relation",
+          "relation": "oneToOne",
+          "target": "admin::user",
+          "configurable": false,
+          "writable": false,
+          "visible": false,
+          "useJoinTable": false,
+          "private": true
+        }
+      },
+      "__schema__": {
+        "collectionName": "makes",
+        "info": {
+          "singularName": "make",
+          "pluralName": "makes",
+          "displayName": "Make",
+          "description": ""
+        },
+        "options": {
+          "draftAndPublish": true
+        },
+        "pluginOptions": {},
+        "attributes": {
+          "name": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "uid",
+            "targetField": "name"
+          },
+          "image": {
+            "type": "media",
+            "multiple": false,
+            "required": false,
+            "allowedTypes": [
+              "images",
+              "files",
+              "videos",
+              "audios"
+            ]
+          },
+          "vehicles": {
+            "type": "relation",
+            "relation": "oneToMany",
+            "target": "api::vehicle.vehicle",
+            "mappedBy": "make"
+          }
+        },
+        "kind": "collectionType"
+      },
+      "modelType": "contentType",
+      "modelName": "make",
+      "connection": "default",
+      "uid": "api::make.make",
+      "apiName": "make",
+      "globalId": "Make",
+      "actions": {},
+      "lifecycles": {}
+    },
     "api::store.store": {
       "kind": "collectionType",
       "collectionName": "stores",
@@ -1443,6 +1837,102 @@
       "actions": {},
       "lifecycles": {}
     },
+    "api::type.type": {
+      "kind": "collectionType",
+      "collectionName": "types",
+      "info": {
+        "singularName": "type",
+        "pluralName": "types",
+        "displayName": "Type"
+      },
+      "options": {
+        "draftAndPublish": true
+      },
+      "pluginOptions": {},
+      "attributes": {
+        "name": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "uid",
+          "targetField": "name"
+        },
+        "vehicles": {
+          "type": "relation",
+          "relation": "oneToMany",
+          "target": "api::vehicle.vehicle",
+          "mappedBy": "type"
+        },
+        "createdAt": {
+          "type": "datetime"
+        },
+        "updatedAt": {
+          "type": "datetime"
+        },
+        "publishedAt": {
+          "type": "datetime",
+          "configurable": false,
+          "writable": true,
+          "visible": false
+        },
+        "createdBy": {
+          "type": "relation",
+          "relation": "oneToOne",
+          "target": "admin::user",
+          "configurable": false,
+          "writable": false,
+          "visible": false,
+          "useJoinTable": false,
+          "private": true
+        },
+        "updatedBy": {
+          "type": "relation",
+          "relation": "oneToOne",
+          "target": "admin::user",
+          "configurable": false,
+          "writable": false,
+          "visible": false,
+          "useJoinTable": false,
+          "private": true
+        }
+      },
+      "__schema__": {
+        "collectionName": "types",
+        "info": {
+          "singularName": "type",
+          "pluralName": "types",
+          "displayName": "Type"
+        },
+        "options": {
+          "draftAndPublish": true
+        },
+        "pluginOptions": {},
+        "attributes": {
+          "name": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "uid",
+            "targetField": "name"
+          },
+          "vehicles": {
+            "type": "relation",
+            "relation": "oneToMany",
+            "target": "api::vehicle.vehicle",
+            "mappedBy": "type"
+          }
+        },
+        "kind": "collectionType"
+      },
+      "modelType": "contentType",
+      "modelName": "type",
+      "connection": "default",
+      "uid": "api::type.type",
+      "apiName": "type",
+      "globalId": "Type",
+      "actions": {},
+      "lifecycles": {}
+    },
     "api::vehicle.vehicle": {
       "kind": "collectionType",
       "collectionName": "vehicles",
@@ -1467,7 +1957,8 @@
           "type": "decimal"
         },
         "slug": {
-          "type": "uid"
+          "type": "uid",
+          "targetField": "title"
         },
         "store": {
           "type": "relation",
@@ -1475,11 +1966,26 @@
           "target": "api::store.store",
           "inversedBy": "vehicles"
         },
-        "make": {
-          "type": "string"
-        },
         "model": {
           "type": "string"
+        },
+        "category": {
+          "type": "relation",
+          "relation": "manyToOne",
+          "target": "api::category.category",
+          "inversedBy": "vehicles"
+        },
+        "make": {
+          "type": "relation",
+          "relation": "manyToOne",
+          "target": "api::make.make",
+          "inversedBy": "vehicles"
+        },
+        "type": {
+          "type": "relation",
+          "relation": "manyToOne",
+          "target": "api::type.type",
+          "inversedBy": "vehicles"
         },
         "createdAt": {
           "type": "datetime"
@@ -1537,7 +2043,8 @@
             "type": "decimal"
           },
           "slug": {
-            "type": "uid"
+            "type": "uid",
+            "targetField": "title"
           },
           "store": {
             "type": "relation",
@@ -1545,11 +2052,26 @@
             "target": "api::store.store",
             "inversedBy": "vehicles"
           },
-          "make": {
-            "type": "string"
-          },
           "model": {
             "type": "string"
+          },
+          "category": {
+            "type": "relation",
+            "relation": "manyToOne",
+            "target": "api::category.category",
+            "inversedBy": "vehicles"
+          },
+          "make": {
+            "type": "relation",
+            "relation": "manyToOne",
+            "target": "api::make.make",
+            "inversedBy": "vehicles"
+          },
+          "type": {
+            "type": "relation",
+            "relation": "manyToOne",
+            "target": "api::type.type",
+            "inversedBy": "vehicles"
           }
         },
         "kind": "collectionType"

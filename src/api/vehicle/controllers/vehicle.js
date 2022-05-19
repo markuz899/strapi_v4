@@ -4,19 +4,23 @@
  *  vehicle controller
  */
 
-const qs = require("qs");
 const { createCoreController } = require("@strapi/strapi").factories;
+const entity = "api::vehicle.vehicle";
 
 module.exports = createCoreController("api::vehicle.vehicle", ({ strapi }) => ({
   async queryFilters(qs) {
     function isNumeric(val) {
       return /^-?\d+$/.test(val);
     }
-
     let query = {
+      category: {
+        name: {
+          $eq: qs.category,
+        },
+      },
       make: {
         name: {
-          $eq: qs.make,
+          $eq: qs.make && qs.make.includes(",") ? qs.make.split(",") : qs.make,
         },
       },
       model: {
@@ -24,21 +28,21 @@ module.exports = createCoreController("api::vehicle.vehicle", ({ strapi }) => ({
       },
       price: {
         $gte: qs.price_gte,
-      },
-      price: {
         $lte: qs.price_lte,
       },
       type: {
         slug: {
-          $eq: qs.type,
+          $eq: qs.type && qs.type.includes(",") ? qs.type.split(",") : qs.type,
         },
+      },
+      powerSupply: {
+        $eq: qs.motor,
       },
     };
     return query;
   },
 
   async find(ctx) {
-    const entity = "api::vehicle.vehicle";
     const { query, params } = ctx;
     const store = params.store;
     if (!store) return {};
@@ -53,24 +57,136 @@ module.exports = createCoreController("api::vehicle.vehicle", ({ strapi }) => ({
           },
         },
       },
-      sort: [query.sort],
-      populate: ["store", "category", "make", "type"],
+      sort: [query._sort],
+      populate: ["store", "category", "make", "type", "image"],
     };
 
     const data = await strapi.service(entity).find({
       ...ctx.query,
     });
 
-    return data.results;
+    let compose = data.results.map((el) => ({
+      ...el,
+      optionals: el.optionals ? el.optionals.split(";") : [],
+      make: el.make ? el.make.name : null,
+      type: el.type ? el.type.name : null,
+      category: el.category ? el.category.name : null,
+      store: el.store ? el.store.name : null,
+    }));
+
+    return compose;
   },
+
   async findOne(ctx) {
-    const entity = "api::vehicle.vehicle";
-    const { id } = ctx.params;
-    const { query } = ctx;
+    const { make, model, slug, store } = ctx.params;
+    if (!make || !model || !slug) return;
 
-    const data = await strapi.service(entity).findOne(id, query);
-    const sanitizedEntity = await this.sanitizeOutput(data, ctx);
+    ctx.query = {
+      where: {
+        store: {
+          name: {
+            $eq: store,
+          },
+        },
+        make: {
+          name: {
+            $eq: make,
+          },
+        },
+        model: {
+          $eq: model,
+        },
+        slug: {
+          $eq: slug,
+        },
+      },
+      populate: ["store", "category", "make", "type", "image"],
+    };
+    const data = await strapi.db.query(entity).findOne({ ...ctx.query });
 
-    return this.transformResponse(sanitizedEntity);
+    let compose = {
+      ...data,
+      make: data.make ? data.make.name : "",
+      type: data.type ? data.type.name : "",
+      category: data.category ? data.category.name : "",
+      store: data.store ? data.store.name : "",
+    };
+
+    return compose;
+  },
+
+  async findMake(ctx) {
+    const { make, store } = ctx.params;
+    if (!make) return;
+
+    ctx.query = {
+      filters: {
+        store: {
+          name: {
+            $eq: store,
+          },
+        },
+        make: {
+          name: {
+            $eq: make,
+          },
+        },
+      },
+      populate: ["store", "category", "make", "type", "image"],
+    };
+
+    const data = await strapi.service(entity).find({
+      ...ctx.query,
+    });
+
+    let compose = data.results.map((el) => ({
+      ...el,
+      optionals: el.optionals ? el.optionals.split(";") : [],
+      make: el.make ? el.make.name : null,
+      type: el.type ? el.type.name : null,
+      category: el.category ? el.category.name : null,
+      store: el.store ? el.store.name : null,
+    }));
+
+    return compose;
+  },
+
+  async findMakeModel(ctx) {
+    const { make, model, store } = ctx.params;
+    if (!make || !model || !store) return;
+
+    ctx.query = {
+      filters: {
+        store: {
+          name: {
+            $eq: store,
+          },
+        },
+        make: {
+          name: {
+            $eq: make,
+          },
+        },
+        model: {
+          $eq: model,
+        },
+      },
+      populate: ["store", "category", "make", "type", "image"],
+    };
+
+    const data = await strapi.service(entity).find({
+      ...ctx.query,
+    });
+
+    let compose = data.results.map((el) => ({
+      ...el,
+      optionals: el.optionals ? el.optionals.split(";") : [],
+      make: el.make ? el.make.name : null,
+      type: el.type ? el.type.name : null,
+      category: el.category ? el.category.name : null,
+      store: el.store ? el.store.name : null,
+    }));
+
+    return compose;
   },
 }));
