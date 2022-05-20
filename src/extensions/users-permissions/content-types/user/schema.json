@@ -61,6 +61,11 @@
       "relation": "manyToOne",
       "target": "api::store.store",
       "inversedBy": "users"
+    },
+    "wishlists": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::vehicle.vehicle"
     }
   }
 }

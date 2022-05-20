@@ -13,17 +13,21 @@
   "pluginOptions": {},
   "attributes": {
     "title": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "description": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "price": {
-      "type": "float"
+      "type": "float",
+      "required": true
     },
     "slug": {
       "type": "uid",
-      "targetField": "title"
+      "targetField": "title",
+      "required": true
     },
     "store": {
       "type": "relation",
@@ -32,7 +36,8 @@
       "inversedBy": "vehicles"
     },
     "model": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "category": {
       "type": "relation",
@@ -53,22 +58,32 @@
       "inversedBy": "vehicles"
     },
     "quantity": {
-      "type": "integer"
+      "type": "integer",
+      "default": 1
     },
     "engine": {
-      "type": "string"
+      "type": "string",
+      "default": "1.0",
+      "required": true
     },
     "power": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "doors": {
-      "type": "integer"
+      "type": "integer",
+      "default": 5,
+      "required": true
     },
     "seats": {
-      "type": "integer"
+      "type": "integer",
+      "required": true,
+      "default": 5
     },
     "transmission": {
-      "type": "string"
+      "type": "string",
+      "default": "Manuale",
+      "required": true
     },
     "width": {
       "type": "string"
@@ -83,19 +98,24 @@
       "type": "json"
     },
     "equipment": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "optionals": {
       "type": "string"
     },
     "promptDelivery": {
-      "type": "boolean"
+      "type": "boolean",
+      "default": false
     },
     "superOffert": {
-      "type": "boolean"
+      "type": "boolean",
+      "default": false
     },
     "powerSupply": {
-      "type": "string"
+      "type": "string",
+      "default": "Benzina",
+      "required": true
     },
     "battery": {
       "type": "string"
@@ -115,12 +135,9 @@
     "image": {
       "type": "media",
       "multiple": false,
-      "required": false,
+      "required": true,
       "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
+        "images"
       ]
     }
   }

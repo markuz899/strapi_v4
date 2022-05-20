@@ -51,7 +51,7 @@ module.exports = (plugin) => {
           },
         },
       },
-      populate: ["store"],
+      populate: ["wishlists"],
     };
 
     // Check if the user exists.
@@ -71,13 +71,13 @@ module.exports = (plugin) => {
     //   }),
     //   user: await sanitizeUser(user, ctx),
     // });
-    ctx.send(await sanitizeUser(user, ctx));
+    ctx.send(user);
   };
 
   plugin.controllers.user.find = async (ctx) => {
     const users = await strapi.entityService.findMany(
       "plugin::users-permissions.user",
-      { ...ctx.params, populate: ["role", "store"] }
+      { ...ctx.params, populate: ["role", "store", "wishlists"] }
     );
 
     ctx.body = users.map((user) => sanitizeOutput(user));
@@ -122,7 +122,7 @@ module.exports = (plugin) => {
             },
           },
         },
-        populate: ["store"],
+        populate: ["store", "wishlists"],
       };
 
       // Check if the user exists.
