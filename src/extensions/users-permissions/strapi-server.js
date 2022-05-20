@@ -65,12 +65,13 @@ module.exports = (plugin) => {
       ]);
     }
 
-    ctx.send({
-      jwt: getService("jwt").issue({
-        id: user.id,
-      }),
-      user: await sanitizeUser(user, ctx),
-    });
+    // ctx.send({
+    //   jwt: getService("jwt").issue({
+    //     id: user.id,
+    //   }),
+    //   user: await sanitizeUser(user, ctx),
+    // });
+    ctx.send(await sanitizeUser(user, ctx));
   };
 
   plugin.controllers.user.find = async (ctx) => {
@@ -464,6 +465,68 @@ module.exports = (plugin) => {
     }
   };
 
+  plugin.controllers.user.update = async (ctx) => {
+    const storeName = ctx.params.store;
+    const userState = ctx.state.user;
+    const advancedConfigs = await strapi
+      .store({ type: "plugin", name: "users-permissions", key: "advanced" })
+      .get();
+
+    const { id } = ctx.params;
+    const { email, username, password } = ctx.request.body;
+
+    const user = await strapi.query("plugin::users-permissions.user").findOne({
+      where: {
+        email: userState.email,
+        store: {
+          name: {
+            $eq: storeName,
+          },
+        },
+      },
+    });
+
+    await validateUpdateUserBody(ctx.request.body);
+
+    if (
+      user.provider === "local" &&
+      _.has(ctx.request.body, "password") &&
+      !password
+    ) {
+      throw new ValidationError("password.notNull");
+    }
+
+    if (_.has(ctx.request.body, "username")) {
+      const userWithSameUsername = await strapi
+        .query("plugin::users-permissions.user")
+        .findOne({ where: { username } });
+
+      if (userWithSameUsername && userWithSameUsername.id != id) {
+        throw new ApplicationError("Username already taken");
+      }
+    }
+
+    if (_.has(ctx.request.body, "email") && advancedConfigs.unique_email) {
+      const userWithSameEmail = await strapi
+        .query("plugin::users-permissions.user")
+        .findOne({ where: { email: email.toLowerCase() } });
+
+      if (userWithSameEmail && userWithSameEmail.id != id) {
+        throw new ApplicationError("Email already taken");
+      }
+      ctx.request.body.email = ctx.request.body.email.toLowerCase();
+    }
+
+    let updateData = {
+      ...ctx.request.body,
+    };
+
+    const data = await getService("user").edit(user.id, updateData);
+    const sanitizedData = await sanitizeOutput(data, ctx);
+
+    ctx.send(sanitizedData);
+  };
+
   // user routing
   // /:store/auth/local
   plugin.routes["content-api"].routes.push({
@@ -510,6 +573,16 @@ module.exports = (plugin) => {
     method: "POST",
     path: "/:store/auth/reset-password",
     handler: "user.resetPassword",
+    config: {
+      prefix: "",
+    },
+  });
+
+  // /:store/auth/update
+  plugin.routes["content-api"].routes.push({
+    method: "PUT",
+    path: "/:store/users",
+    handler: "user.update",
     config: {
       prefix: "",
     },
