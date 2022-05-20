@@ -150,6 +150,300 @@
           "sortable": true
         }
       },
+      "quantity": {
+        "edit": {
+          "label": "quantity",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true
+        },
+        "list": {
+          "label": "quantity",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "engine": {
+        "edit": {
+          "label": "engine",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true
+        },
+        "list": {
+          "label": "engine",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "power": {
+        "edit": {
+          "label": "power",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true
+        },
+        "list": {
+          "label": "power",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "doors": {
+        "edit": {
+          "label": "doors",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true
+        },
+        "list": {
+          "label": "doors",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "seats": {
+        "edit": {
+          "label": "seats",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true
+        },
+        "list": {
+          "label": "seats",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "transmission": {
+        "edit": {
+          "label": "transmission",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true
+        },
+        "list": {
+          "label": "transmission",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "width": {
+        "edit": {
+          "label": "width",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true
+        },
+        "list": {
+          "label": "width",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "height": {
+        "edit": {
+          "label": "height",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true
+        },
+        "list": {
+          "label": "height",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "long": {
+        "edit": {
+          "label": "long",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true
+        },
+        "list": {
+          "label": "long",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "services": {
+        "edit": {
+          "label": "services",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true
+        },
+        "list": {
+          "label": "services",
+          "searchable": false,
+          "sortable": false
+        }
+      },
+      "equipment": {
+        "edit": {
+          "label": "equipment",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true
+        },
+        "list": {
+          "label": "equipment",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "optionals": {
+        "edit": {
+          "label": "optionals",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true
+        },
+        "list": {
+          "label": "optionals",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "promptDelivery": {
+        "edit": {
+          "label": "promptDelivery",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true
+        },
+        "list": {
+          "label": "promptDelivery",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "superOffert": {
+        "edit": {
+          "label": "superOffert",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true
+        },
+        "list": {
+          "label": "superOffert",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "powerSupply": {
+        "edit": {
+          "label": "powerSupply",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true
+        },
+        "list": {
+          "label": "powerSupply",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "battery": {
+        "edit": {
+          "label": "battery",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true
+        },
+        "list": {
+          "label": "battery",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "luggageRack": {
+        "edit": {
+          "label": "luggageRack",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true
+        },
+        "list": {
+          "label": "luggageRack",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "weight": {
+        "edit": {
+          "label": "weight",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true
+        },
+        "list": {
+          "label": "weight",
+          "searchable": true,
+          "sortable": true
+        }
+      },
+      "optionsDeal": {
+        "edit": {
+          "label": "optionsDeal",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true
+        },
+        "list": {
+          "label": "optionsDeal",
+          "searchable": false,
+          "sortable": false
+        }
+      },
+      "deals": {
+        "edit": {
+          "label": "deals",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true
+        },
+        "list": {
+          "label": "deals",
+          "searchable": false,
+          "sortable": false
+        }
+      },
+      "image": {
+        "edit": {
+          "label": "image",
+          "description": "",
+          "placeholder": "",
+          "visible": true,
+          "editable": true
+        },
+        "list": {
+          "label": "image",
+          "searchable": false,
+          "sortable": false
+        }
+      },
       "createdAt": {
         "edit": {
           "label": "createdAt",
@@ -180,27 +474,11 @@
       }
     },
     "layouts": {
-      "list": [
-        "id",
-        "title",
-        "description",
-        "price"
-      ],
       "edit": [
         [
           {
             "name": "title",
             "size": 6
-          },
-          {
-            "name": "description",
-            "size": 6
-          }
-        ],
-        [
-          {
-            "name": "price",
-            "size": 4
           },
           {
             "name": "slug",
@@ -209,8 +487,126 @@
         ],
         [
           {
+            "name": "description",
+            "size": 6
+          },
+          {
+            "name": "price",
+            "size": 4
+          }
+        ],
+        [
+          {
             "name": "model",
             "size": 6
+          },
+          {
+            "name": "quantity",
+            "size": 4
+          }
+        ],
+        [
+          {
+            "name": "engine",
+            "size": 6
+          },
+          {
+            "name": "power",
+            "size": 6
+          }
+        ],
+        [
+          {
+            "name": "image",
+            "size": 6
+          }
+        ],
+        [
+          {
+            "name": "seats",
+            "size": 4
+          },
+          {
+            "name": "doors",
+            "size": 4
+          }
+        ],
+        [
+          {
+            "name": "transmission",
+            "size": 6
+          },
+          {
+            "name": "width",
+            "size": 6
+          }
+        ],
+        [
+          {
+            "name": "height",
+            "size": 6
+          },
+          {
+            "name": "long",
+            "size": 6
+          }
+        ],
+        [
+          {
+            "name": "equipment",
+            "size": 6
+          },
+          {
+            "name": "optionals",
+            "size": 6
+          }
+        ],
+        [
+          {
+            "name": "promptDelivery",
+            "size": 4
+          },
+          {
+            "name": "superOffert",
+            "size": 4
+          }
+        ],
+        [
+          {
+            "name": "powerSupply",
+            "size": 6
+          },
+          {
+            "name": "battery",
+            "size": 6
+          }
+        ],
+        [
+          {
+            "name": "luggageRack",
+            "size": 6
+          },
+          {
+            "name": "weight",
+            "size": 4
+          }
+        ],
+        [
+          {
+            "name": "services",
+            "size": 12
+          }
+        ],
+        [
+          {
+            "name": "optionsDeal",
+            "size": 12
+          }
+        ],
+        [
+          {
+            "name": "deals",
+            "size": 12
           }
         ]
       ],
@@ -219,6 +615,15 @@
         "category",
         "make",
         "type"
+      ],
+      "list": [
+        "id",
+        "title",
+        "description",
+        "price",
+        "category",
+        "make",
+        "store"
       ]
     }
   },

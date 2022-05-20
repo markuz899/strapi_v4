@@ -199,7 +199,8 @@
         "fields": [
           "name",
           "slug",
-          "vehicles"
+          "vehicles",
+          "users"
         ]
       },
       "conditions": []
@@ -223,7 +224,8 @@
         "fields": [
           "name",
           "slug",
-          "vehicles"
+          "vehicles",
+          "users"
         ]
       },
       "conditions": []
@@ -235,7 +237,8 @@
         "fields": [
           "name",
           "slug",
-          "vehicles"
+          "vehicles",
+          "users"
         ]
       },
       "conditions": []
@@ -301,7 +304,28 @@
           "model",
           "category",
           "make",
-          "type"
+          "type",
+          "quantity",
+          "engine",
+          "power",
+          "doors",
+          "seats",
+          "transmission",
+          "width",
+          "height",
+          "long",
+          "services",
+          "equipment",
+          "optionals",
+          "promptDelivery",
+          "superOffert",
+          "powerSupply",
+          "battery",
+          "luggageRack",
+          "weight",
+          "optionsDeal",
+          "deals",
+          "image"
         ]
       },
       "conditions": []
@@ -331,7 +355,28 @@
           "model",
           "category",
           "make",
-          "type"
+          "type",
+          "quantity",
+          "engine",
+          "power",
+          "doors",
+          "seats",
+          "transmission",
+          "width",
+          "height",
+          "long",
+          "services",
+          "equipment",
+          "optionals",
+          "promptDelivery",
+          "superOffert",
+          "powerSupply",
+          "battery",
+          "luggageRack",
+          "weight",
+          "optionsDeal",
+          "deals",
+          "image"
         ]
       },
       "conditions": []
@@ -349,7 +394,28 @@
           "model",
           "category",
           "make",
-          "type"
+          "type",
+          "quantity",
+          "engine",
+          "power",
+          "doors",
+          "seats",
+          "transmission",
+          "width",
+          "height",
+          "long",
+          "services",
+          "equipment",
+          "optionals",
+          "promptDelivery",
+          "superOffert",
+          "powerSupply",
+          "battery",
+          "luggageRack",
+          "weight",
+          "optionsDeal",
+          "deals",
+          "image"
         ]
       },
       "conditions": []
@@ -497,7 +563,6 @@
       "subject": "plugin::users-permissions.user",
       "properties": {
         "fields": [
-          "username",
           "email",
           "provider",
           "password",
@@ -505,7 +570,9 @@
           "confirmationToken",
           "confirmed",
           "blocked",
-          "role"
+          "role",
+          "store",
+          "wishlists"
         ]
       },
       "conditions": []
@@ -521,7 +588,6 @@
       "subject": "plugin::users-permissions.user",
       "properties": {
         "fields": [
-          "username",
           "email",
           "provider",
           "password",
@@ -529,7 +595,9 @@
           "confirmationToken",
           "confirmed",
           "blocked",
-          "role"
+          "role",
+          "store",
+          "wishlists"
         ]
       },
       "conditions": []
@@ -539,7 +607,6 @@
       "subject": "plugin::users-permissions.user",
       "properties": {
         "fields": [
-          "username",
           "email",
           "provider",
           "password",
@@ -547,7 +614,9 @@
           "confirmationToken",
           "confirmed",
           "blocked",
-          "role"
+          "role",
+          "store",
+          "wishlists"
         ]
       },
       "conditions": []

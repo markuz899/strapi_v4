@@ -4,6 +4,506 @@
   "description": "Authors can manage the content they have created.",
   "permissions": [
     {
+      "action": "plugin::content-manager.explorer.create",
+      "subject": "api::category.category",
+      "properties": {
+        "fields": [
+          "label",
+          "name",
+          "slug",
+          "vehicles"
+        ]
+      },
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
+      "action": "plugin::content-manager.explorer.delete",
+      "subject": "api::category.category",
+      "properties": {},
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
+      "action": "plugin::content-manager.explorer.read",
+      "subject": "api::category.category",
+      "properties": {
+        "fields": [
+          "label",
+          "name",
+          "slug",
+          "vehicles"
+        ]
+      },
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
+      "action": "plugin::content-manager.explorer.update",
+      "subject": "api::category.category",
+      "properties": {
+        "fields": [
+          "label",
+          "name",
+          "slug",
+          "vehicles"
+        ]
+      },
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
+      "action": "plugin::content-manager.explorer.create",
+      "subject": "api::lead.lead",
+      "properties": {
+        "fields": [
+          "car_make",
+          "car_type",
+          "city",
+          "deal_advance",
+          "deal_duration",
+          "deal_price",
+          "email",
+          "firstname",
+          "lastname",
+          "lead_source",
+          "privacy",
+          "province",
+          "store",
+          "telephone",
+          "userType",
+          "vehicle"
+        ]
+      },
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
+      "action": "plugin::content-manager.explorer.delete",
+      "subject": "api::lead.lead",
+      "properties": {},
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
+      "action": "plugin::content-manager.explorer.read",
+      "subject": "api::lead.lead",
+      "properties": {
+        "fields": [
+          "car_make",
+          "car_type",
+          "city",
+          "deal_advance",
+          "deal_duration",
+          "deal_price",
+          "email",
+          "firstname",
+          "lastname",
+          "lead_source",
+          "privacy",
+          "province",
+          "store",
+          "telephone",
+          "userType",
+          "vehicle"
+        ]
+      },
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
+      "action": "plugin::content-manager.explorer.update",
+      "subject": "api::lead.lead",
+      "properties": {
+        "fields": [
+          "car_make",
+          "car_type",
+          "city",
+          "deal_advance",
+          "deal_duration",
+          "deal_price",
+          "email",
+          "firstname",
+          "lastname",
+          "lead_source",
+          "privacy",
+          "province",
+          "store",
+          "telephone",
+          "userType",
+          "vehicle"
+        ]
+      },
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
+      "action": "plugin::content-manager.explorer.create",
+      "subject": "api::make.make",
+      "properties": {
+        "fields": [
+          "image",
+          "name",
+          "slug",
+          "vehicles"
+        ]
+      },
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
+      "action": "plugin::content-manager.explorer.delete",
+      "subject": "api::make.make",
+      "properties": {},
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
+      "action": "plugin::content-manager.explorer.read",
+      "subject": "api::make.make",
+      "properties": {
+        "fields": [
+          "image",
+          "name",
+          "slug",
+          "vehicles"
+        ]
+      },
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
+      "action": "plugin::content-manager.explorer.update",
+      "subject": "api::make.make",
+      "properties": {
+        "fields": [
+          "image",
+          "name",
+          "slug",
+          "vehicles"
+        ]
+      },
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
+      "action": "plugin::content-manager.explorer.create",
+      "subject": "api::store.store",
+      "properties": {
+        "fields": [
+          "name",
+          "slug",
+          "users",
+          "vehicles"
+        ]
+      },
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
+      "action": "plugin::content-manager.explorer.delete",
+      "subject": "api::store.store",
+      "properties": {},
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
+      "action": "plugin::content-manager.explorer.read",
+      "subject": "api::store.store",
+      "properties": {
+        "fields": [
+          "name",
+          "slug",
+          "users",
+          "vehicles"
+        ]
+      },
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
+      "action": "plugin::content-manager.explorer.update",
+      "subject": "api::store.store",
+      "properties": {
+        "fields": [
+          "name",
+          "slug",
+          "users",
+          "vehicles"
+        ]
+      },
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
+      "action": "plugin::content-manager.explorer.create",
+      "subject": "api::type.type",
+      "properties": {
+        "fields": [
+          "name",
+          "slug",
+          "vehicles"
+        ]
+      },
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
+      "action": "plugin::content-manager.explorer.delete",
+      "subject": "api::type.type",
+      "properties": {},
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
+      "action": "plugin::content-manager.explorer.read",
+      "subject": "api::type.type",
+      "properties": {
+        "fields": [
+          "name",
+          "slug",
+          "vehicles"
+        ]
+      },
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
+      "action": "plugin::content-manager.explorer.update",
+      "subject": "api::type.type",
+      "properties": {
+        "fields": [
+          "name",
+          "slug",
+          "vehicles"
+        ]
+      },
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
+      "action": "plugin::content-manager.explorer.create",
+      "subject": "api::vehicle.vehicle",
+      "properties": {
+        "fields": [
+          "battery",
+          "category",
+          "deals",
+          "description",
+          "doors",
+          "engine",
+          "equipment",
+          "height",
+          "image",
+          "long",
+          "luggageRack",
+          "make",
+          "model",
+          "optionals",
+          "optionsDeal",
+          "power",
+          "powerSupply",
+          "price",
+          "promptDelivery",
+          "quantity",
+          "seats",
+          "services",
+          "slug",
+          "store",
+          "superOffert",
+          "title",
+          "transmission",
+          "type",
+          "weight",
+          "width"
+        ]
+      },
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
+      "action": "plugin::content-manager.explorer.delete",
+      "subject": "api::vehicle.vehicle",
+      "properties": {},
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
+      "action": "plugin::content-manager.explorer.read",
+      "subject": "api::vehicle.vehicle",
+      "properties": {
+        "fields": [
+          "battery",
+          "category",
+          "deals",
+          "description",
+          "doors",
+          "engine",
+          "equipment",
+          "height",
+          "image",
+          "long",
+          "luggageRack",
+          "make",
+          "model",
+          "optionals",
+          "optionsDeal",
+          "power",
+          "powerSupply",
+          "price",
+          "promptDelivery",
+          "quantity",
+          "seats",
+          "services",
+          "slug",
+          "store",
+          "superOffert",
+          "title",
+          "transmission",
+          "type",
+          "weight",
+          "width"
+        ]
+      },
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
+      "action": "plugin::content-manager.explorer.update",
+      "subject": "api::vehicle.vehicle",
+      "properties": {
+        "fields": [
+          "battery",
+          "category",
+          "deals",
+          "description",
+          "doors",
+          "engine",
+          "equipment",
+          "height",
+          "image",
+          "long",
+          "luggageRack",
+          "make",
+          "model",
+          "optionals",
+          "optionsDeal",
+          "power",
+          "powerSupply",
+          "price",
+          "promptDelivery",
+          "quantity",
+          "seats",
+          "services",
+          "slug",
+          "store",
+          "superOffert",
+          "title",
+          "transmission",
+          "type",
+          "weight",
+          "width"
+        ]
+      },
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
+      "action": "plugin::content-manager.explorer.create",
+      "subject": "plugin::users-permissions.user",
+      "properties": {
+        "fields": [
+          "blocked",
+          "confirmationToken",
+          "confirmed",
+          "email",
+          "password",
+          "provider",
+          "resetPasswordToken",
+          "role",
+          "store",
+          "wishlists"
+        ]
+      },
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
+      "action": "plugin::content-manager.explorer.delete",
+      "subject": "plugin::users-permissions.user",
+      "properties": {},
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
+      "action": "plugin::content-manager.explorer.read",
+      "subject": "plugin::users-permissions.user",
+      "properties": {
+        "fields": [
+          "blocked",
+          "confirmationToken",
+          "confirmed",
+          "email",
+          "password",
+          "provider",
+          "resetPasswordToken",
+          "role",
+          "store",
+          "wishlists"
+        ]
+      },
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
+      "action": "plugin::content-manager.explorer.update",
+      "subject": "plugin::users-permissions.user",
+      "properties": {
+        "fields": [
+          "blocked",
+          "confirmationToken",
+          "confirmed",
+          "email",
+          "password",
+          "provider",
+          "resetPasswordToken",
+          "role",
+          "store",
+          "wishlists"
+        ]
+      },
+      "conditions": [
+        "admin::is-creator"
+      ]
+    },
+    {
       "action": "plugin::upload.assets.copy-link",
       "subject": null,
       "properties": {},

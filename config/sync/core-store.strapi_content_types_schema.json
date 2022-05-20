@@ -1182,13 +1182,6 @@
         "timestamps": true
       },
       "attributes": {
-        "username": {
-          "type": "string",
-          "minLength": 3,
-          "unique": true,
-          "configurable": false,
-          "required": true
-        },
         "email": {
           "type": "email",
           "minLength": 6,
@@ -1232,6 +1225,17 @@
           "inversedBy": "users",
           "configurable": false
         },
+        "store": {
+          "type": "relation",
+          "relation": "manyToOne",
+          "target": "api::store.store",
+          "inversedBy": "users"
+        },
+        "wishlists": {
+          "type": "relation",
+          "relation": "oneToMany",
+          "target": "api::vehicle.vehicle"
+        },
         "createdAt": {
           "type": "datetime"
         },
@@ -1273,6 +1277,7 @@
         }
       },
       "kind": "collectionType",
+      "__filename__": "schema.json",
       "__schema__": {
         "collectionName": "up_users",
         "info": {
@@ -1287,13 +1292,6 @@
           "timestamps": true
         },
         "attributes": {
-          "username": {
-            "type": "string",
-            "minLength": 3,
-            "unique": true,
-            "configurable": false,
-            "required": true
-          },
           "email": {
             "type": "email",
             "minLength": 6,
@@ -1336,6 +1334,17 @@
             "target": "plugin::users-permissions.role",
             "inversedBy": "users",
             "configurable": false
+          },
+          "store": {
+            "type": "relation",
+            "relation": "manyToOne",
+            "target": "api::store.store",
+            "inversedBy": "users"
+          },
+          "wishlists": {
+            "type": "relation",
+            "relation": "oneToMany",
+            "target": "api::vehicle.vehicle"
           }
         },
         "kind": "collectionType"
@@ -1747,7 +1756,8 @@
       "info": {
         "singularName": "store",
         "pluralName": "stores",
-        "displayName": "Store"
+        "displayName": "Store",
+        "description": ""
       },
       "options": {
         "draftAndPublish": true
@@ -1765,6 +1775,12 @@
           "type": "relation",
           "relation": "oneToMany",
           "target": "api::vehicle.vehicle",
+          "mappedBy": "store"
+        },
+        "users": {
+          "type": "relation",
+          "relation": "oneToMany",
+          "target": "plugin::users-permissions.user",
           "mappedBy": "store"
         },
         "createdAt": {
@@ -1805,7 +1821,8 @@
         "info": {
           "singularName": "store",
           "pluralName": "stores",
-          "displayName": "Store"
+          "displayName": "Store",
+          "description": ""
         },
         "options": {
           "draftAndPublish": true
@@ -1823,6 +1840,12 @@
             "type": "relation",
             "relation": "oneToMany",
             "target": "api::vehicle.vehicle",
+            "mappedBy": "store"
+          },
+          "users": {
+            "type": "relation",
+            "relation": "oneToMany",
+            "target": "plugin::users-permissions.user",
             "mappedBy": "store"
           }
         },
@@ -1948,17 +1971,21 @@
       "pluginOptions": {},
       "attributes": {
         "title": {
-          "type": "string"
+          "type": "string",
+          "required": true
         },
         "description": {
-          "type": "string"
+          "type": "string",
+          "required": true
         },
         "price": {
-          "type": "decimal"
+          "type": "float",
+          "required": true
         },
         "slug": {
           "type": "uid",
-          "targetField": "title"
+          "targetField": "title",
+          "required": true
         },
         "store": {
           "type": "relation",
@@ -1967,7 +1994,8 @@
           "inversedBy": "vehicles"
         },
         "model": {
-          "type": "string"
+          "type": "string",
+          "required": true
         },
         "category": {
           "type": "relation",
@@ -1986,6 +2014,89 @@
           "relation": "manyToOne",
           "target": "api::type.type",
           "inversedBy": "vehicles"
+        },
+        "quantity": {
+          "type": "integer",
+          "default": 1
+        },
+        "engine": {
+          "type": "string",
+          "default": "1.0",
+          "required": true
+        },
+        "power": {
+          "type": "string",
+          "required": true
+        },
+        "doors": {
+          "type": "integer",
+          "default": 5,
+          "required": true
+        },
+        "seats": {
+          "type": "integer",
+          "required": true,
+          "default": 5
+        },
+        "transmission": {
+          "type": "string",
+          "default": "Manuale",
+          "required": true
+        },
+        "width": {
+          "type": "string"
+        },
+        "height": {
+          "type": "string"
+        },
+        "long": {
+          "type": "string"
+        },
+        "services": {
+          "type": "json"
+        },
+        "equipment": {
+          "type": "string",
+          "required": true
+        },
+        "optionals": {
+          "type": "string"
+        },
+        "promptDelivery": {
+          "type": "boolean",
+          "default": false
+        },
+        "superOffert": {
+          "type": "boolean",
+          "default": false
+        },
+        "powerSupply": {
+          "type": "string",
+          "default": "Benzina",
+          "required": true
+        },
+        "battery": {
+          "type": "string"
+        },
+        "luggageRack": {
+          "type": "string"
+        },
+        "weight": {
+          "type": "integer"
+        },
+        "optionsDeal": {
+          "type": "json"
+        },
+        "deals": {
+          "type": "json"
+        },
+        "image": {
+          "type": "media",
+          "multiple": false,
+          "required": true,
+          "allowedTypes": [
+            "images"
+          ]
         },
         "createdAt": {
           "type": "datetime"
@@ -2034,17 +2145,21 @@
         "pluginOptions": {},
         "attributes": {
           "title": {
-            "type": "string"
+            "type": "string",
+            "required": true
           },
           "description": {
-            "type": "string"
+            "type": "string",
+            "required": true
           },
           "price": {
-            "type": "decimal"
+            "type": "float",
+            "required": true
           },
           "slug": {
             "type": "uid",
-            "targetField": "title"
+            "targetField": "title",
+            "required": true
           },
           "store": {
             "type": "relation",
@@ -2053,7 +2168,8 @@
             "inversedBy": "vehicles"
           },
           "model": {
-            "type": "string"
+            "type": "string",
+            "required": true
           },
           "category": {
             "type": "relation",
@@ -2072,6 +2188,89 @@
             "relation": "manyToOne",
             "target": "api::type.type",
             "inversedBy": "vehicles"
+          },
+          "quantity": {
+            "type": "integer",
+            "default": 1
+          },
+          "engine": {
+            "type": "string",
+            "default": "1.0",
+            "required": true
+          },
+          "power": {
+            "type": "string",
+            "required": true
+          },
+          "doors": {
+            "type": "integer",
+            "default": 5,
+            "required": true
+          },
+          "seats": {
+            "type": "integer",
+            "required": true,
+            "default": 5
+          },
+          "transmission": {
+            "type": "string",
+            "default": "Manuale",
+            "required": true
+          },
+          "width": {
+            "type": "string"
+          },
+          "height": {
+            "type": "string"
+          },
+          "long": {
+            "type": "string"
+          },
+          "services": {
+            "type": "json"
+          },
+          "equipment": {
+            "type": "string",
+            "required": true
+          },
+          "optionals": {
+            "type": "string"
+          },
+          "promptDelivery": {
+            "type": "boolean",
+            "default": false
+          },
+          "superOffert": {
+            "type": "boolean",
+            "default": false
+          },
+          "powerSupply": {
+            "type": "string",
+            "default": "Benzina",
+            "required": true
+          },
+          "battery": {
+            "type": "string"
+          },
+          "luggageRack": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "integer"
+          },
+          "optionsDeal": {
+            "type": "json"
+          },
+          "deals": {
+            "type": "json"
+          },
+          "image": {
+            "type": "media",
+            "multiple": false,
+            "required": true,
+            "allowedTypes": [
+              "images"
+            ]
           }
         },
         "kind": "collectionType"

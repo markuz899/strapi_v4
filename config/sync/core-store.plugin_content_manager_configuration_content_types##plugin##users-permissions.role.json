@@ -84,7 +84,7 @@
           "placeholder": "",
           "visible": true,
           "editable": true,
-          "mainField": "username"
+          "mainField": "provider"
         },
         "list": {
           "label": "users",
@@ -128,10 +128,6 @@
         "description",
         "type"
       ],
-      "editRelations": [
-        "permissions",
-        "users"
-      ],
       "edit": [
         [
           {
@@ -149,6 +145,10 @@
             "size": 6
           }
         ]
+      ],
+      "editRelations": [
+        "permissions",
+        "users"
       ]
     }
   },

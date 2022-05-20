@@ -4,10 +4,31 @@
   "type": "public",
   "permissions": [
     {
+      "action": "api::category.category.find"
+    },
+    {
+      "action": "api::category.category.findOne"
+    },
+    {
+      "action": "api::lead.lead.create"
+    },
+    {
+      "action": "api::make.make.find"
+    },
+    {
+      "action": "api::make.make.findOne"
+    },
+    {
       "action": "api::store.store.find"
     },
     {
       "action": "api::store.store.findOne"
+    },
+    {
+      "action": "api::type.type.find"
+    },
+    {
+      "action": "api::type.type.findOne"
     },
     {
       "action": "api::utils.utils.getCity"
@@ -19,6 +40,12 @@
       "action": "api::vehicle.vehicle.find"
     },
     {
+      "action": "api::vehicle.vehicle.findMake"
+    },
+    {
+      "action": "api::vehicle.vehicle.findMakeModel"
+    },
+    {
       "action": "api::vehicle.vehicle.findOne"
     },
     {
@@ -28,10 +55,37 @@
       "action": "plugin::users-permissions.auth.connect"
     },
     {
+      "action": "plugin::users-permissions.auth.emailConfirmation"
+    },
+    {
+      "action": "plugin::users-permissions.auth.forgotPassword"
+    },
+    {
       "action": "plugin::users-permissions.auth.register"
     },
     {
+      "action": "plugin::users-permissions.auth.resetPassword"
+    },
+    {
+      "action": "plugin::users-permissions.auth.sendEmailConfirmation"
+    },
+    {
+      "action": "plugin::users-permissions.user.forgotPassword"
+    },
+    {
+      "action": "plugin::users-permissions.user.login"
+    },
+    {
       "action": "plugin::users-permissions.user.me"
+    },
+    {
+      "action": "plugin::users-permissions.user.register"
+    },
+    {
+      "action": "plugin::users-permissions.user.resetPassword"
+    },
+    {
+      "action": "plugin::users-permissions.user.update"
     }
   ]
 }
