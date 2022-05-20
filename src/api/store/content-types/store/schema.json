@@ -30,6 +30,11 @@
       "relation": "manyToMany",
       "target": "api::vehicle.vehicle",
       "mappedBy": "store"
+    },
+    "admin_users": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "admin::user"
     }
   }
 }
