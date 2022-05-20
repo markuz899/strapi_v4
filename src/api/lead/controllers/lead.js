@@ -1,9 +1,30 @@
-'use strict';
+const { getService } = require("@strapi/plugin-users-permissions/server/utils");
+const entity = "api::lead.lead";
 
-/**
- *  lead controller
- */
+module.exports = {
+  async create(ctx) {
+    const storeName = ctx.params.store;
 
-const { createCoreController } = require('@strapi/strapi').factories;
+    const { body } = ctx.request;
 
-module.exports = createCoreController('api::lead.lead');
+    if (!body) {
+      throw new Error("Invalid body");
+    }
+
+    try {
+      await strapi.service(entity).create({
+        data: {
+          ...body,
+          store: storeName,
+          publishedAt: new Date(),
+        },
+      });
+    } catch (err) {
+      throw new Error(err);
+    }
+
+    return {
+      status: true,
+    };
+  },
+};
