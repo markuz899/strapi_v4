@@ -51,7 +51,7 @@ module.exports = (plugin) => {
           },
         },
       },
-      populate: ["wishlists"],
+      populate: ["wishlists", "role", "store"],
     };
 
     // Check if the user exists.

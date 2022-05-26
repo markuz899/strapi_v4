@@ -19,12 +19,6 @@
       "type": "uid",
       "targetField": "name"
     },
-    "users": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "plugin::users-permissions.user",
-      "mappedBy": "store"
-    },
     "vehicles": {
       "type": "relation",
       "relation": "manyToMany",
@@ -35,6 +29,12 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "admin::user"
+    },
+    "users": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "store"
     }
   }
 }
