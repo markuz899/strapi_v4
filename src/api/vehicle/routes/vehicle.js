@@ -20,5 +20,15 @@ module.exports = {
       path: "/:store/vehicles/:make/:model",
       handler: "vehicle.findMakeModel",
     },
+    {
+      method: "GET",
+      path: "/vehicles",
+      handler: "vehicle.findRefine",
+    },
+    {
+      method: "GET",
+      path: "/vehicles/:id",
+      handler: "vehicle.findOneRefine",
+    },
   ],
 };

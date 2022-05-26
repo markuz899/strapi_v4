@@ -189,4 +189,22 @@ module.exports = createCoreController("api::vehicle.vehicle", ({ strapi }) => ({
 
     return compose;
   },
+  async findRefine(ctx) {
+    ctx.query = { ...ctx.query, local: "en" };
+
+    const { data, meta } = await super.find(ctx);
+
+    return { data, meta };
+  },
+  async findOneRefine(ctx) {
+    const { id } = ctx.params;
+    const { query } = ctx;
+
+    const entity = await strapi
+      .service("api::vehicle.vehicle")
+      .findOne(id, query);
+    const sanitizedEntity = await this.sanitizeOutput(entity, ctx);
+
+    return this.transformResponse(sanitizedEntity);
+  },
 }));

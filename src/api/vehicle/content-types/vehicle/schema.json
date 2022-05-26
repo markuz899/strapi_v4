@@ -139,6 +139,9 @@
       "allowedTypes": [
         "images"
       ]
+    },
+    "name": {
+      "type": "string"
     }
   }
 }

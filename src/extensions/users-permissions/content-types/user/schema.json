@@ -66,6 +66,11 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::vehicle.vehicle"
+    },
+    "username": {
+      "type": "string",
+      "unique": false,
+      "configurable": true
     }
   }
 }

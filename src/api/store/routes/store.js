@@ -1,9 +1,12 @@
-'use strict';
-
-/**
- * store router.
- */
-
-const { createCoreRouter } = require('@strapi/strapi').factories;
-
-module.exports = createCoreRouter('api::store.store');
+module.exports = {
+  routes: [
+    {
+      method: "GET",
+      path: "/stores",
+      handler: "store.find",
+      config: {
+        policies: [],
+      },
+    },
+  ],
+};
