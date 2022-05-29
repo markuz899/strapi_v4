@@ -30,5 +30,15 @@ module.exports = {
       path: "/vehicles/:id",
       handler: "vehicle.findOneRefine",
     },
+    {
+      method: "PUT",
+      path: "/vehicles/:id",
+      handler: "vehicle.updateOneRefine",
+    },
+    {
+      method: "DELETE",
+      path: "/vehicles/:id",
+      handler: "vehicle.deleteOneRefine",
+    },
   ],
 };
