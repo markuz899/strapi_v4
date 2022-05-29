@@ -31,6 +31,11 @@ module.exports = {
       handler: "vehicle.findOneRefine",
     },
     {
+      method: "POST",
+      path: "/vehicles",
+      handler: "vehicle.createOneRefine",
+    },
+    {
       method: "PUT",
       path: "/vehicles/:id",
       handler: "vehicle.updateOneRefine",
