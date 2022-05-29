@@ -19,4 +19,20 @@ module.exports = createCoreController("api::make.make", ({ strapi }) => ({
 
     return data.results;
   },
+  async findRefine(ctx) {
+    ctx.query = { ...ctx.query, local: "en" };
+
+    const { data, meta } = await super.find(ctx);
+
+    return { data, meta };
+  },
+  async findOneRefine(ctx) {
+    const { id } = ctx.params;
+    const { query } = ctx;
+
+    const entity = await strapi.service("api::make.make").findOne(id, query);
+    const sanitizedEntity = await this.sanitizeOutput(entity, ctx);
+
+    return this.transformResponse(sanitizedEntity);
+  },
 }));

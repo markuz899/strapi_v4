@@ -36,5 +36,23 @@ module.exports = createCoreController(
       const data = await strapi.db.query(entity).findOne({ ...ctx.query });
       return data;
     },
+    async findRefine(ctx) {
+      ctx.query = { ...ctx.query, local: "en" };
+
+      const { data, meta } = await super.find(ctx);
+
+      return { data, meta };
+    },
+    async findOneRefine(ctx) {
+      const { id } = ctx.params;
+      const { query } = ctx;
+
+      const entity = await strapi
+        .service("api::category.category")
+        .findOne(id, query);
+      const sanitizedEntity = await this.sanitizeOutput(entity, ctx);
+
+      return this.transformResponse(sanitizedEntity);
+    },
   })
 );

@@ -10,5 +10,15 @@ module.exports = {
       path: "/:store/categories/:slug",
       handler: "category.findOne",
     },
+    {
+      method: "GET",
+      path: "/categories",
+      handler: "category.findRefine",
+    },
+    {
+      method: "GET",
+      path: "/categories/:id",
+      handler: "category.findOneRefine",
+    },
   ],
 };

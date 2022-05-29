@@ -40,5 +40,15 @@ module.exports = {
         policies: [],
       },
     },
+    {
+      method: "GET",
+      path: "/makes",
+      handler: "make.findRefine",
+    },
+    {
+      method: "GET",
+      path: "/makes/:id",
+      handler: "make.findOneRefine",
+    },
   ],
 };
