@@ -25,5 +25,10 @@ module.exports = {
       path: "/:store/types/:id",
       handler: "type.delete",
     },
+    {
+      method: "GET",
+      path: "/types",
+      handler: "type.findRefine",
+    },
   ],
 };
