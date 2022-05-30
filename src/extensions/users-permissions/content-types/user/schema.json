@@ -70,6 +70,10 @@
     "username": {
       "type": "string",
       "unique": false
+    },
+    "isAdmin": {
+      "type": "boolean",
+      "default": false
     }
   }
 }
