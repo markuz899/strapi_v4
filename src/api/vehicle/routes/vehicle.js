@@ -34,6 +34,9 @@ module.exports = {
       method: "POST",
       path: "/vehicles",
       handler: "vehicle.createOneRefine",
+      config: {
+        policies: ["global::is-adminRole"],
+      },
     },
     {
       method: "PUT",
