@@ -35,7 +35,7 @@ module.exports = {
       path: "/vehicles",
       handler: "vehicle.createOneRefine",
       config: {
-        policies: ["global::is-adminRole"],
+        policies: ["global::is-adminRole", "global::is-adminStore"],
       },
     },
     {
