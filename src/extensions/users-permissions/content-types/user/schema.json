@@ -74,6 +74,12 @@
     "isAdmin": {
       "type": "boolean",
       "default": false
+    },
+    "name": {
+      "type": "string"
+    },
+    "surname": {
+      "type": "string"
     }
   }
 }
