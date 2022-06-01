@@ -29,9 +29,14 @@ module.exports = {
 
   async findRefine(ctx) {
     ctx.query = { ...ctx.query };
+    let data = {};
+    let meta = {};
+    const lead = await strapi.service(entity).find();
 
-    const { data, meta } = await super.find(ctx);
-
+    if (lead) {
+      data = lead?.results;
+      meta = { pagination: lead?.pagination };
+    }
     return { data, meta };
   },
 
