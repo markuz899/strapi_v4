@@ -42,11 +42,17 @@ module.exports = {
       method: "PUT",
       path: "/vehicles/:id",
       handler: "vehicle.updateOneRefine",
+      config: {
+        policies: ["global::is-adminRole"],
+      },
     },
     {
       method: "DELETE",
       path: "/vehicles/:id",
       handler: "vehicle.deleteOneRefine",
+      config: {
+        policies: ["global::is-adminRole"],
+      },
     },
   ],
 };

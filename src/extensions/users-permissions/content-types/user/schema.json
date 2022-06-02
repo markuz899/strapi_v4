@@ -69,7 +69,8 @@
     },
     "username": {
       "type": "string",
-      "unique": false
+      "unique": false,
+      "minLength": 3
     },
     "isAdmin": {
       "type": "boolean",
@@ -80,6 +81,10 @@
     },
     "surname": {
       "type": "string"
+    },
+    "isMark": {
+      "type": "boolean",
+      "default": false
     }
   }
 }
