@@ -32,10 +32,10 @@ module.exports = {
   },
 
   async findRefine(ctx) {
-    ctx.query = { ...ctx.query };
+    ctx.query = { ...ctx.query, populate: ["store"] };
     let data = {};
     let meta = {};
-    const lead = await strapi.service(entity).find(ctx);
+    const lead = await strapi.service(entity).find({ ...ctx.query });
 
     if (lead) {
       data = lead?.results;
