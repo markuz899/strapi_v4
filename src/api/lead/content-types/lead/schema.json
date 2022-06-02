@@ -4,7 +4,8 @@
   "info": {
     "singularName": "lead",
     "pluralName": "leads",
-    "displayName": "Lead"
+    "displayName": "Lead",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -53,13 +54,15 @@
     "car_make": {
       "type": "json"
     },
-    "store": {
-      "type": "string"
-    },
     "vehicle": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::vehicle.vehicle"
+    },
+    "store": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::store.store"
     }
   }
 }

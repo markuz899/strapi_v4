@@ -10,11 +10,15 @@ module.exports = {
       throw new Error("Invalid body");
     }
 
+    //take id from storeName
+    const stores = await strapi.service("api::store.store").find();
+    const currentStore = stores?.results?.find((el) => el.name === storeName);
+
     try {
       await strapi.service(entity).create({
         data: {
           ...body,
-          store: storeName,
+          store: currentStore?.id || null,
           publishedAt: new Date(),
         },
       });
@@ -31,7 +35,7 @@ module.exports = {
     ctx.query = { ...ctx.query };
     let data = {};
     let meta = {};
-    const lead = await strapi.service(entity).find();
+    const lead = await strapi.service(entity).find(ctx);
 
     if (lead) {
       data = lead?.results;
