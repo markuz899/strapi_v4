@@ -2,7 +2,7 @@ module.exports = {
   routes: [
     {
       method: "POST",
-      path: "/customers/leads",
+      path: "/customers",
       handler: "customer.create",
     },
     {
