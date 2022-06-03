@@ -45,7 +45,19 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
     const { id } = ctx.params;
     const { body } = ctx.request;
 
-    const result = await strapi.service(entity).update(id, body);
+    //take id from storeName
+    const stores = await strapi.service("api::store.store").find();
+    const currentStore = stores?.results?.find(
+      (el) => el.id === body.data.store
+    );
+
+    const result = await strapi.service(entity).update(id, {
+      data: {
+        ...body.data,
+        store: currentStore?.id || null,
+        // vehicles: body.data.vehicle_list || [],
+      },
+    });
 
     return result;
   },
