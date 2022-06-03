@@ -63,6 +63,9 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::store.store"
+    },
+    "note": {
+      "type": "richtext"
     }
   }
 }
