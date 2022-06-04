@@ -8,5 +8,13 @@ module.exports = {
         policies: [],
       },
     },
+    {
+      method: "GET",
+      path: "/stores/:id",
+      handler: "store.findOneRefine",
+      config: {
+        policies: [],
+      },
+    },
   ],
 };

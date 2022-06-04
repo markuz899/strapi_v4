@@ -30,6 +30,13 @@
       "relation": "manyToMany",
       "target": "plugin::users-permissions.user",
       "mappedBy": "store"
+    },
+    "logo": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
     }
   }
 }
