@@ -46,6 +46,12 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::vehicle.vehicle"
+    },
+    "city": {
+      "type": "string"
+    },
+    "province": {
+      "type": "string"
     }
   }
 }
