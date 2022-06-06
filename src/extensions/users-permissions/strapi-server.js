@@ -527,6 +527,146 @@ module.exports = (plugin) => {
     ctx.send(sanitizedData);
   };
 
+  plugin.controllers.user.forgotPassword = async (ctx) => {
+    let { email } = ctx.request.body;
+    // Check if the provided email is valid or not.
+    const isEmail = emailRegExp.test(email);
+
+    if (isEmail) {
+      email = email.toLowerCase();
+    } else {
+      throw new ValidationError("Please provide a valid email address");
+    }
+
+    const pluginStore = await strapi.store({
+      type: "plugin",
+      name: "users-permissions",
+    });
+
+    // Find the user by email.
+    const user = await strapi.query("plugin::users-permissions.user").findOne({
+      where: {
+        email: email.toLowerCase(),
+      },
+    });
+
+    // User not found.
+    if (!user) {
+      throw new ApplicationError("This email does not exist");
+    }
+
+    // User blocked
+    if (user.blocked) {
+      throw new ApplicationError("This user is disabled");
+    }
+
+    // Generate random token.
+    const resetPasswordToken = crypto.randomBytes(64).toString("hex");
+
+    const settings = await pluginStore
+      .get({ key: "email" })
+      .then((storeEmail) => {
+        try {
+          return storeEmail["reset_password"].options;
+        } catch (error) {
+          return {};
+        }
+      });
+
+    const advanced = await pluginStore.get({
+      key: "advanced",
+    });
+
+    const userInfo = await sanitizeUser(user, ctx);
+
+    settings.message = await getService("users-permissions").template(
+      settings.message,
+      {
+        URL: advanced.email_reset_password,
+        SERVER_URL: getAbsoluteServerUrl(strapi.config),
+        ADMIN_URL: getAbsoluteAdminUrl(strapi.config),
+        USER: userInfo,
+        TOKEN: resetPasswordToken,
+      }
+    );
+
+    settings.object = await getService("users-permissions").template(
+      settings.object,
+      {
+        USER: userInfo,
+      }
+    );
+
+    try {
+      // Send an email to the user.
+      await strapi
+        .plugin("email")
+        .service("email")
+        .send({
+          // to: user.email,
+          to: "marcoliberati.89@gmail.com",
+          from:
+            settings.from.email || settings.from.name
+              ? `${settings.from.name} <${process.env.SEND_GRID_DEFAULT_FROM}>`
+              : undefined,
+          replyTo: settings.response_email,
+          subject: settings.object,
+          text: settings.message,
+          html: settings.message,
+        });
+    } catch (err) {
+      throw new ApplicationError(err.message);
+    }
+
+    // Update the user.
+    await strapi
+      .query("plugin::users-permissions.user")
+      .update({ where: { id: user.id }, data: { resetPasswordToken } });
+
+    ctx.send({ ok: true });
+  };
+
+  plugin.controllers.user.resetPassword = async (ctx) => {
+    const params = _.assign({}, ctx.request.body, ctx.params);
+
+    if (
+      params.password &&
+      params.passwordConfirmation &&
+      params.password === params.passwordConfirmation &&
+      params.code
+    ) {
+      const user = await strapi
+        .query("plugin::users-permissions.user")
+        .findOne({
+          where: {
+            resetPasswordToken: `${params.code}`,
+          },
+        });
+
+      if (!user) {
+        throw new ValidationError("Incorrect code provided");
+      }
+
+      await getService("user").edit(user.id, {
+        resetPasswordToken: null,
+        password: params.password,
+      });
+      // Update the user.
+      ctx.send({
+        jwt: getService("jwt").issue({ id: user.id }),
+        user: await sanitizeUser(user, ctx),
+      });
+    } else if (
+      params.password &&
+      params.passwordConfirmation &&
+      params.password !== params.passwordConfirmation
+    ) {
+      throw new ValidationError("Passwords do not match");
+    } else {
+      throw new ValidationError("Incorrect params provided");
+    }
+  };
+
   // user routing
   // /:store/auth/local
   plugin.routes["content-api"].routes.push({
@@ -567,11 +707,27 @@ module.exports = (plugin) => {
       prefix: "",
     },
   });
+  plugin.routes["content-api"].routes.push({
+    method: "POST",
+    path: "/v1/auth/forgot-password",
+    handler: "user.forgotPassword",
+    config: {
+      prefix: "",
+    },
+  });
 
   // /:store/auth/reset-password
   plugin.routes["content-api"].routes.push({
     method: "POST",
     path: "/:store/auth/reset-password",
+    handler: "user.resetPassword",
+    config: {
+      prefix: "",
+    },
+  });
+  plugin.routes["content-api"].routes.push({
+    method: "POST",
+    path: "/v1/auth/reset-password",
     handler: "user.resetPassword",
     config: {
       prefix: "",
