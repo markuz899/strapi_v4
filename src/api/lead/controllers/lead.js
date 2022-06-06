@@ -1,6 +1,9 @@
+"use strict";
+
+const { createCoreController } = require("@strapi/strapi").factories;
 const entity = "api::lead.lead";
 
-module.exports = {
+module.exports = createCoreController(entity, ({ strapi }) => ({
   async create(ctx) {
     const storeName = ctx.params.store;
 
@@ -70,4 +73,4 @@ module.exports = {
     const sanitizedEntity = await this.sanitizeOutput(lead, ctx);
     return this.transformResponse(sanitizedEntity);
   },
-};
+}));
