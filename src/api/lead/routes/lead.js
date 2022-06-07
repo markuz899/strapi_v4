@@ -6,6 +6,11 @@ module.exports = {
       handler: "lead.create",
     },
     {
+      method: "POST",
+      path: "/leads",
+      handler: "lead.createRefine",
+    },
+    {
       method: "GET",
       path: "/leads",
       handler: "lead.findRefine",
