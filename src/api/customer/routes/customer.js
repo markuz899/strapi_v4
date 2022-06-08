@@ -25,5 +25,10 @@ module.exports = {
       path: "/customers/:id",
       handler: "customer.deleteOneRefine",
     },
+    {
+      method: "POST",
+      path: "/create-customers",
+      handler: "customer.createCustomer",
+    },
   ],
 };

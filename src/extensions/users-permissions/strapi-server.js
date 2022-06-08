@@ -667,6 +667,29 @@ module.exports = (plugin) => {
     }
   };
 
+  plugin.controllers.user.getUserStore = async (ctx) => {
+    console.log("entro nuova");
+    let data, meta;
+    //take user sales
+    ctx.query = {
+      filters: {
+        isSales: {
+          $eq: true,
+        },
+      },
+      populate: ["role", "opportunities", "store"],
+    };
+    const users = await strapi.entityService.findMany(
+      "plugin::users-permissions.user",
+      ctx.query
+    );
+
+    data = users;
+    meta = { pagination: {} };
+    return { data, meta };
+    ctx.body = users.map((user) => sanitizeOutput(user));
+  };
+
   // user routing
   // /:store/auth/local
   plugin.routes["content-api"].routes.push({
@@ -739,6 +762,16 @@ module.exports = (plugin) => {
     method: "PUT",
     path: "/:store/users",
     handler: "user.update",
+    config: {
+      prefix: "",
+    },
+  });
+
+  // /users/getUserStore
+  plugin.routes["content-api"].routes.push({
+    method: "GET",
+    path: "/v1/users/store",
+    handler: "user.getUserStore",
     config: {
       prefix: "",
     },

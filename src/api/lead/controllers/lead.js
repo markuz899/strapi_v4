@@ -2,6 +2,7 @@
 
 const { createCoreController } = require("@strapi/strapi").factories;
 const entity = "api::lead.lead";
+const opportunitieEntity = "api::opportunity.opportunity";
 
 module.exports = createCoreController(entity, ({ strapi }) => ({
   async create(ctx) {
@@ -17,11 +18,53 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
     const stores = await strapi.service("api::store.store").find();
     const currentStore = stores?.results?.find((el) => el.name === storeName);
 
+    //sales selected
+    let userSalesSelected = null;
+
+    //take user sales
+    ctx.query = {
+      filters: {
+        isSales: {
+          $eq: true,
+        },
+        store: {
+          name: {
+            $eq: currentStore.name,
+          },
+        },
+      },
+      populate: ["role", "opportunities", "store"],
+    };
+    const users = await strapi.entityService.findMany(
+      "plugin::users-permissions.user",
+      ctx.query
+    );
+
+    //add user sales selected logic
+    let targets = users?.filter((el) => el?.opportunities?.length < 10);
+    if (targets.length) {
+      userSalesSelected = targets[0];
+    } else {
+      userSalesSelected = users[0];
+    }
+
     try {
-      await strapi.service(entity).create({
+      let lead = await strapi.service(entity).create({
         data: {
           ...body,
           store: currentStore?.id || null,
+          users_sales: userSalesSelected ? userSalesSelected.id : null,
+          publishedAt: new Date(),
+        },
+      });
+
+      // create an opportunity from lead
+      await strapi.service(opportunitieEntity).create({
+        data: {
+          ...body,
+          store: currentStore?.id || null,
+          users_sales: userSalesSelected ? userSalesSelected.id : null,
+          lead: lead.id,
           publishedAt: new Date(),
         },
       });
@@ -47,6 +90,7 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
       data: {
         ...body.data,
         store: currentStore?.id || null,
+        users_sales: "",
         publishedAt: new Date(),
       },
     });

@@ -69,4 +69,51 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
     const sanitizedEntity = await this.sanitizeOutput(lead, ctx);
     return this.transformResponse(sanitizedEntity);
   },
+
+  async createCustomer(ctx) {
+    const { body } = ctx.request;
+
+    ctx.query = {
+      where: {
+        email: {
+          $eq: body.email,
+        },
+      },
+      populate: ["*"],
+    };
+
+    const one = await strapi.db.query(entity).findOne({ ...ctx.query });
+
+    if (one?.id) {
+      return {
+        status: "404",
+        message: "Il cliente esiste",
+      };
+    }
+
+    const payload = {
+      name: body.firstname,
+      surname: body.lastname,
+      email: body.email,
+      telephone: body.telephone,
+      city: body.city,
+      province: body.province,
+      vehicles: body.vehicle?.id,
+      store: body.store?.id,
+    };
+    // take id from storeName
+    const stores = await strapi.service("api::store.store").find();
+    const currentStore = stores?.results?.find(
+      (el) => el.id === body?.store?.id
+    );
+
+    const result = await strapi.service(entity).create({
+      data: {
+        ...payload,
+        stores: currentStore?.id || null,
+        publishedAt: new Date(),
+      },
+    });
+    return result;
+  },
 }));

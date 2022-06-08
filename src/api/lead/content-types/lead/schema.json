@@ -66,6 +66,26 @@
     },
     "note": {
       "type": "richtext"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "created",
+        "progress",
+        "close"
+      ],
+      "default": "created"
+    },
+    "users_sales": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "opportunity": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::opportunity.opportunity",
+      "mappedBy": "lead"
     }
   }
 }

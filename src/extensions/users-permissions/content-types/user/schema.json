@@ -82,9 +82,15 @@
     "surname": {
       "type": "string"
     },
-    "isMark": {
+    "isSales": {
       "type": "boolean",
       "default": false
+    },
+    "opportunities": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::opportunity.opportunity",
+      "mappedBy": "users_sales"
     }
   }
 }

@@ -19,7 +19,8 @@
       "type": "string"
     },
     "email": {
-      "type": "email"
+      "type": "email",
+      "unique": true
     },
     "birthday": {
       "type": "date"
