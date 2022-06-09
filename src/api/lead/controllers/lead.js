@@ -3,6 +3,7 @@
 const { createCoreController } = require("@strapi/strapi").factories;
 const entity = "api::lead.lead";
 const opportunitieEntity = "api::opportunity.opportunity";
+const notificationEntity = "api::notification.notification";
 
 module.exports = createCoreController(entity, ({ strapi }) => ({
   async create(ctx) {
@@ -68,6 +69,17 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
           publishedAt: new Date(),
         },
       });
+      // create a notification from lead
+      await strapi.service(notificationEntity).create({
+        data: {
+          text: "Ti è stata assegnata una lead",
+          users_sales: userSalesSelected ? userSalesSelected.id : null,
+          store: currentStore?.id || null,
+          lead: lead.id || null,
+          link: lead.id || null,
+          publishedAt: new Date(),
+        },
+      });
     } catch (err) {
       throw new Error(err);
     }
@@ -130,15 +142,67 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
       (el) => el.id === body.data?.store?.id
     );
 
-    const result = await strapi.service(entity).update(id, {
+    //sales selected
+    let userSalesSelected = null;
+
+    //take user sales
+    ctx.query = {
+      filters: {
+        isSales: {
+          $eq: true,
+        },
+        store: {
+          name: {
+            $eq: currentStore.name,
+          },
+        },
+      },
+      populate: ["role", "opportunities", "store"],
+    };
+    const users = await strapi.entityService.findMany(
+      "plugin::users-permissions.user",
+      ctx.query
+    );
+
+    //add user sales selected logic
+    let targets = users?.filter((el) => el?.opportunities?.length < 10);
+    if (targets.length) {
+      userSalesSelected = targets[0];
+    } else {
+      userSalesSelected = users[0];
+    }
+
+    const currentLead = await strapi.service(entity).findOne(id, {
+      populate: ["opportunity"],
+    });
+
+    const editLead = await strapi.service(entity).update(id, {
       data: {
         ...body.data,
         store: currentStore?.id || null,
-        // vehicles: body.data.vehicle_list || [],
       },
     });
 
-    return result;
+    if (currentLead?.opportunity?.id) {
+      // update the opportunity relation
+      const status = {
+        created: "open",
+        progress: "contacted",
+        close: "close",
+      };
+      await strapi
+        .service(opportunitieEntity)
+        .update(currentLead?.opportunity?.id, {
+          data: {
+            ...body.data,
+            lead: id,
+            status: status[body.data.status] || "open",
+            // vehicles: body.data.vehicle_list || [],
+          },
+        });
+    }
+
+    return editLead;
   },
 
   async deleteOneRefine(ctx) {

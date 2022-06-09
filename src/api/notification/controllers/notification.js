@@ -27,7 +27,7 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
     const isAdmin = ctx.state?.user?.isAdmin;
 
     if (isAdmin) {
-      ctx.query = { populate: ["*"] };
+      ctx.query = { populate: ["users_sales", "lead"] };
     } else {
       ctx.query = {
         ...ctx.query,

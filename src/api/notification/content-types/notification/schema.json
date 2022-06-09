@@ -28,6 +28,14 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::store.store"
+    },
+    "lead": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::lead.lead"
+    },
+    "link": {
+      "type": "integer"
     }
   }
 }
