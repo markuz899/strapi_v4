@@ -4,6 +4,7 @@ const { createCoreController } = require("@strapi/strapi").factories;
 const entity = "api::lead.lead";
 const opportunitieEntity = "api::opportunity.opportunity";
 const notificationEntity = "api::notification.notification";
+const { assignOpportunities } = require("./");
 
 module.exports = createCoreController(entity, ({ strapi }) => ({
   async create(ctx) {
@@ -20,34 +21,13 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
     const currentStore = stores?.results?.find((el) => el.name === storeName);
 
     //sales selected
-    let userSalesSelected = null;
-
-    //take user sales
-    ctx.query = {
-      filters: {
-        isSales: {
-          $eq: true,
-        },
-        store: {
-          name: {
-            $eq: currentStore.name,
-          },
-        },
-      },
-      populate: ["role", "opportunities", "store"],
-    };
-    const users = await strapi.entityService.findMany(
-      "plugin::users-permissions.user",
-      ctx.query
+    let userSalesSelected = await assignOpportunities(
+      ctx,
+      strapi,
+      currentStore
     );
 
-    //add user sales selected logic
-    let targets = users?.filter((el) => el?.opportunities?.length < 10);
-    if (targets.length) {
-      userSalesSelected = targets[0];
-    } else {
-      userSalesSelected = users[0];
-    }
+    //////////////////////////////////////START MAGIC///////////////////////////////////////////////
 
     try {
       let lead = await strapi.service(entity).create({
@@ -141,36 +121,6 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
     const currentStore = stores?.results?.find(
       (el) => el.id === body.data?.store?.id
     );
-
-    //sales selected
-    let userSalesSelected = null;
-
-    //take user sales
-    ctx.query = {
-      filters: {
-        isSales: {
-          $eq: true,
-        },
-        store: {
-          name: {
-            $eq: currentStore.name,
-          },
-        },
-      },
-      populate: ["role", "opportunities", "store"],
-    };
-    const users = await strapi.entityService.findMany(
-      "plugin::users-permissions.user",
-      ctx.query
-    );
-
-    //add user sales selected logic
-    let targets = users?.filter((el) => el?.opportunities?.length < 10);
-    if (targets.length) {
-      userSalesSelected = targets[0];
-    } else {
-      userSalesSelected = users[0];
-    }
 
     const currentLead = await strapi.service(entity).findOne(id, {
       populate: ["opportunity"],
