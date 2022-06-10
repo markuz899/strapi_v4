@@ -23,15 +23,21 @@ module.exports = {
 
     users &&
       users.forEach((user) => {
-        let atWork = user.opportunities.filter(
+        let userOpportunity = user.opportunities;
+        let userOpportunityWork = user.opportunities.filter(
           (opp) => opp.status === "contacted"
         );
-        allUserWorkers.push({ works: atWork.length, user });
+        allUserWorkers.push({
+          opportunities: userOpportunity.length,
+          works: userOpportunityWork.length,
+          user,
+        });
       });
 
     //take minor workers
     let minUserWorkers = allUserWorkers.reduce((prev, current) => {
-      return prev.works < current.works ? prev : current;
+      // return prev.works < current.works ? prev : current;
+      return prev.opportunities < current.opportunities ? prev : current;
     });
 
     return minUserWorkers.user;

@@ -52,7 +52,7 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
       // create a notification from lead
       await strapi.service(notificationEntity).create({
         data: {
-          text: "Ti è stata assegnata una lead",
+          text: `Ti è stata assegnata una lead con email ${lead.email}`,
           users_sales: userSalesSelected ? userSalesSelected.id : null,
           store: currentStore?.id || null,
           lead: lead.id || null,
@@ -133,23 +133,57 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
       },
     });
 
-    if (currentLead?.opportunity?.id) {
-      // update the opportunity relation
-      const status = {
-        created: "open",
-        progress: "contacted",
-        close: "close",
+    if (body?.data?.users_sales?.id) {
+      // check if opportunity exist
+      let query = {
+        populate: ["lead"],
+        where: {
+          lead: {
+            id: {
+              $eq: id,
+            },
+          },
+        },
       };
-      await strapi
-        .service(opportunitieEntity)
-        .update(currentLead?.opportunity?.id, {
+      const currentOpportunity = await strapi.db
+        .query(opportunitieEntity)
+        .findOne(query);
+
+      if (currentOpportunity) {
+        // update the opportunity relation
+        const status = {
+          created: "open",
+          progress: "contacted",
+          close: "close",
+        };
+        await strapi
+          .service(opportunitieEntity)
+          .update(currentLead?.opportunity?.id, {
+            data: {
+              ...body.data,
+              lead: id,
+              status: status[body.data.status] || "open",
+              users_sales: body?.data?.users_sales?.id,
+              // vehicles: body.data.vehicle_list || [],
+            },
+          });
+      } else {
+        // create an opportunity from lead
+        const status = {
+          created: "open",
+          progress: "contacted",
+          close: "close",
+        };
+        await strapi.service(opportunitieEntity).create({
           data: {
             ...body.data,
             lead: id,
             status: status[body.data.status] || "open",
-            // vehicles: body.data.vehicle_list || [],
+            store: currentStore?.id || null,
+            publishedAt: new Date(),
           },
         });
+      }
     }
 
     return editLead;
