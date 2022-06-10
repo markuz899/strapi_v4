@@ -210,6 +210,7 @@ module.exports = createCoreController("api::vehicle.vehicle", ({ strapi }) => ({
   async createOneRefine(ctx) {
     const { body } = ctx.request;
 
+    if (body.title === "") return;
     const result = await strapi.service("api::vehicle.vehicle").create(body);
     return result;
   },
