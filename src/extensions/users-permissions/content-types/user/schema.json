@@ -91,6 +91,10 @@
       "relation": "oneToMany",
       "target": "api::opportunity.opportunity",
       "mappedBy": "users_sales"
+    },
+    "isSuperAdmin": {
+      "type": "boolean",
+      "default": false
     }
   }
 }
