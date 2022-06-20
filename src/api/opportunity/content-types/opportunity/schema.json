@@ -38,7 +38,8 @@
       "enum": [
         "open",
         "contacted",
-        "close"
+        "close-positive",
+        "close-negative"
       ],
       "default": "open"
     },
