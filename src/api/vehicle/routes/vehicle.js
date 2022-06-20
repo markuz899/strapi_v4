@@ -29,6 +29,9 @@ module.exports = {
       method: "GET",
       path: "/vehicles/:id",
       handler: "vehicle.findOneRefine",
+      config: {
+        policies: ["global::is-management"],
+      },
     },
     {
       method: "POST",
