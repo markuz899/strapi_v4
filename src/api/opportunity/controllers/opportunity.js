@@ -12,7 +12,7 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
   async createRefine(ctx) {},
 
   async findRefine(ctx) {
-    const isAdmin = ctx.state?.user?.isAdmin;
+    const isAdmin = ctx.state?.user?.isSuperAdmin || ctx.state?.user?.isAdmin;
 
     if (isAdmin) {
       ctx.query = { ...ctx.query };
