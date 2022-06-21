@@ -668,10 +668,10 @@ module.exports = (plugin) => {
   };
 
   plugin.controllers.user.getUserStore = async (ctx) => {
-    console.log("entro nuova");
     let data, meta;
     //take user sales
     ctx.query = {
+      ...ctx.query,
       filters: {
         isSales: {
           $eq: true,
@@ -687,7 +687,6 @@ module.exports = (plugin) => {
     data = users;
     meta = { pagination: {} };
     return { data, meta };
-    ctx.body = users.map((user) => sanitizeOutput(user));
   };
 
   // user routing
