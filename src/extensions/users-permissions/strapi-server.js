@@ -673,6 +673,7 @@ module.exports = (plugin) => {
     ctx.query = {
       ...ctx.query,
       filters: {
+        ...ctx.query.filters,
         isSales: {
           $eq: true,
         },
