@@ -52,7 +52,8 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
     let status = {
       open: "created",
       contacted: "progress",
-      close: "close",
+      "close-positive": "close",
+      "close-negative": "close",
     };
 
     const opportunity = await strapi.service(entity).findOne(id, {
@@ -67,10 +68,10 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
           status: status[body.data.status],
         },
       });
-
+      strapi.log.debug(`Opportunity update from cmr`)
       return result;
     } catch (err) {
-      console.log("error");
+      strapi.log.error(`Error in update opportunity id ${opportunity.id}`)
     }
   },
 
@@ -93,7 +94,7 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
       const sanitizedEntity = await this.sanitizeOutput(del, ctx);
       return this.transformResponse(sanitizedEntity);
     } catch (err) {
-      console.log("error");
+      strapi.log.error(`Error in delete opportunity id ${opportunity.id}`)
     }
   },
 }));
