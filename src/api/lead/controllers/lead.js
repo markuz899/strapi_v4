@@ -139,7 +139,7 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
     if (body?.data?.users_sales?.id) {
       // check if opportunity exist
       let query = {
-        populate: ["lead"],
+        populate: ["lead", "users_sales"],
         where: {
           lead: {
             id: {
