@@ -60,7 +60,9 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
           publishedAt: new Date(),
         },
       });
+      strapi.log.debug(`Lead created from portal - ${lead.id}`)
     } catch (err) {
+      strapi.log.error(`Error in create lead`)
       throw new Error(err);
     }
 
@@ -86,6 +88,7 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
         publishedAt: new Date(),
       },
     });
+    strapi.log.debug(`Lead created from cmr - ${result.id}`)
     return result;
   },
 
@@ -186,6 +189,7 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
       }
     }
 
+    strapi.log.debug(`Lead update from cmr - ${editLead.id}`)
     return editLead;
   },
 
