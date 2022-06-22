@@ -77,6 +77,10 @@
     },
     "deal_price": {
       "type": "float"
+    },
+    "note": {
+      "type": "richtext",
+      "default": "  "
     }
   }
 }
