@@ -792,6 +792,10 @@ module.exports = (plugin) => {
       ctx.request.body.email = ctx.request.body.email.toLowerCase();
     }
 
+    if (ctx.request.body.data) {
+      ctx.request.body = { ...ctx.request.body.data };
+    }
+
     let updateData = {
       ...ctx.request.body,
       isSales: true,
