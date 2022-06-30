@@ -70,11 +70,12 @@
     "status": {
       "type": "enumeration",
       "enum": [
-        "created",
-        "progress",
-        "close"
+        "open",
+        "contacted",
+        "close-positive",
+        "close-negative"
       ],
-      "default": "created"
+      "default": "open"
     },
     "users_sales": {
       "type": "relation",

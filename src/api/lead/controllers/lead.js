@@ -60,9 +60,9 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
           publishedAt: new Date(),
         },
       });
-      strapi.log.debug(`Lead created from portal - ${lead.id}`)
+      strapi.log.debug(`Lead created from portal - ${lead.id}`);
     } catch (err) {
-      strapi.log.error(`Error in create lead`)
+      strapi.log.error(`Error in create lead`);
       throw new Error(err);
     }
 
@@ -88,7 +88,7 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
         publishedAt: new Date(),
       },
     });
-    strapi.log.debug(`Lead created from cmr - ${result.id}`)
+    strapi.log.debug(`Lead created from cmr - ${result.id}`);
     return result;
   },
 
@@ -154,34 +154,22 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
 
       if (currentOpportunity) {
         // update the opportunity relation
-        const status = {
-          created: "open",
-          progress: "contacted",
-          close: "close",
-        };
         await strapi
           .service(opportunitieEntity)
           .update(currentLead?.opportunity?.id, {
             data: {
               ...body.data,
               lead: id,
-              status: status[body.data.status] || "open",
               users_sales: body?.data?.users_sales?.id,
               // vehicles: body.data.vehicle_list || [],
             },
           });
       } else {
         // create an opportunity from lead
-        const status = {
-          created: "open",
-          progress: "contacted",
-          close: "close",
-        };
         await strapi.service(opportunitieEntity).create({
           data: {
             ...body.data,
             lead: id,
-            status: status[body.data.status] || "open",
             store: currentStore?.id || null,
             publishedAt: new Date(),
           },
@@ -189,7 +177,7 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
       }
     }
 
-    strapi.log.debug(`Lead update from cmr - ${editLead.id}`)
+    strapi.log.debug(`Lead update from cmr - ${editLead.id}`);
     return editLead;
   },
 
