@@ -97,7 +97,7 @@ module.exports = (plugin) => {
 
     const store = strapi.store({ type: "plugin", name: "users-permissions" });
 
-    if (provider === "local") {
+    if (provider === "local" || provider === "cmr") {
       if (!_.get(await store.get({ key: "grant" }), "email.enabled")) {
         throw new ApplicationError("This provider is disabled");
       }
@@ -722,7 +722,7 @@ module.exports = (plugin) => {
 
     const user = {
       ...ctx.request.body,
-      provider: "local",
+      provider: "cmr",
     };
 
     user.email = _.toLower(user.email);
@@ -764,7 +764,7 @@ module.exports = (plugin) => {
     await validateUpdateUserBody(ctx.request.body);
 
     if (
-      user.provider === "local" &&
+      (user.provider === "local" || provider === "cmr") &&
       _.has(ctx.request.body, "password") &&
       !password
     ) {
