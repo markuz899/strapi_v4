@@ -1,0 +1,58 @@
+{
+  "kind": "collectionType",
+  "collectionName": "customers",
+  "info": {
+    "singularName": "customer",
+    "pluralName": "customers",
+    "displayName": "Customer",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "surname": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email",
+      "unique": true
+    },
+    "birthday": {
+      "type": "date"
+    },
+    "telephone": {
+      "type": "biginteger"
+    },
+    "sex": {
+      "type": "enumeration",
+      "enum": [
+        "maschio",
+        "femmina"
+      ]
+    },
+    "stores": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::store.store"
+    },
+    "note": {
+      "type": "richtext"
+    },
+    "vehicles": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::vehicle.vehicle"
+    },
+    "city": {
+      "type": "string"
+    },
+    "province": {
+      "type": "string"
+    }
+  }
+}

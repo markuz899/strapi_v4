@@ -19,22 +19,24 @@
       "type": "uid",
       "targetField": "name"
     },
-    "users": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "plugin::users-permissions.user",
-      "mappedBy": "store"
-    },
     "vehicles": {
       "type": "relation",
       "relation": "manyToMany",
       "target": "api::vehicle.vehicle",
       "mappedBy": "store"
     },
-    "admin_users": {
+    "users": {
       "type": "relation",
-      "relation": "oneToMany",
-      "target": "admin::user"
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "store"
+    },
+    "logo": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
     }
   }
 }

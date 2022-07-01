@@ -207,4 +207,28 @@ module.exports = createCoreController("api::vehicle.vehicle", ({ strapi }) => ({
 
     return this.transformResponse(sanitizedEntity);
   },
+  async createOneRefine(ctx) {
+    const { body } = ctx.request;
+
+    if (body.title === "") return;
+    const result = await strapi.service("api::vehicle.vehicle").create(body);
+    return result;
+  },
+  async updateOneRefine(ctx) {
+    const { id } = ctx.params;
+    const { body } = ctx.request;
+
+    const result = await strapi
+      .service("api::vehicle.vehicle")
+      .update(id, body);
+
+    return result;
+  },
+  async deleteOneRefine(ctx) {
+    const { id } = ctx.params;
+    const entity = await strapi.service("api::vehicle.vehicle").delete(id);
+
+    const sanitizedEntity = await this.sanitizeOutput(entity, ctx);
+    return this.transformResponse(sanitizedEntity);
+  },
 }));

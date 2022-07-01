@@ -20,4 +20,13 @@ module.exports = createCoreController("api::store.store", ({ strapi }) => ({
 
     return { data, meta };
   },
+  async findOneRefine(ctx) {
+    const { id } = ctx.params;
+    const { query } = ctx;
+
+    const lead = await strapi.service(entity).findOne(id, query);
+    const sanitizedEntity = await this.sanitizeOutput(lead, ctx);
+
+    return this.transformResponse(sanitizedEntity);
+  },
 }));

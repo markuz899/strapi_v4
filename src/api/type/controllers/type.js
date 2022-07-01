@@ -19,4 +19,11 @@ module.exports = createCoreController("api::type.type", ({ strapi }) => ({
 
     return data.results;
   },
+  async findRefine(ctx) {
+    ctx.query = { ...ctx.query, local: "en" };
+
+    const { data, meta } = await super.find(ctx);
+
+    return { data, meta };
+  },
 }));

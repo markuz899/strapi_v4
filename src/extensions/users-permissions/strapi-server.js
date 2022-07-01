@@ -51,7 +51,7 @@ module.exports = (plugin) => {
           },
         },
       },
-      populate: ["wishlists"],
+      populate: ["wishlists", "role", "store"],
     };
 
     // Check if the user exists.
@@ -75,12 +75,15 @@ module.exports = (plugin) => {
   };
 
   plugin.controllers.user.find = async (ctx) => {
+    let data, meta;
     const users = await strapi.entityService.findMany(
       "plugin::users-permissions.user",
-      { ...ctx.params, populate: ["role", "store", "wishlists"] }
+      { ...ctx.params, ...ctx.query, populate: ["role", "store", "wishlists"] }
     );
 
-    ctx.body = users.map((user) => sanitizeOutput(user));
+    data = users.map((user) => sanitizeOutput(user));
+    meta = { pagination: {} };
+    return { data, meta };
   };
 
   plugin.controllers.user.login = async (ctx) => {
@@ -94,7 +97,7 @@ module.exports = (plugin) => {
 
     const store = strapi.store({ type: "plugin", name: "users-permissions" });
 
-    if (provider === "local") {
+    if (provider === "local" || provider === "cmr") {
       if (!_.get(await store.get({ key: "grant" }), "email.enabled")) {
         throw new ApplicationError("This provider is disabled");
       }
@@ -527,6 +530,286 @@ module.exports = (plugin) => {
     ctx.send(sanitizedData);
   };
 
+  plugin.controllers.user.forgotPassword = async (ctx) => {
+    let { email } = ctx.request.body;
+    // Check if the provided email is valid or not.
+    const isEmail = emailRegExp.test(email);
+
+    if (isEmail) {
+      email = email.toLowerCase();
+    } else {
+      throw new ValidationError("Please provide a valid email address");
+    }
+
+    const pluginStore = await strapi.store({
+      type: "plugin",
+      name: "users-permissions",
+    });
+
+    // Find the user by email.
+    const user = await strapi.query("plugin::users-permissions.user").findOne({
+      where: {
+        email: email.toLowerCase(),
+      },
+    });
+
+    // User not found.
+    if (!user) {
+      throw new ApplicationError("This email does not exist");
+    }
+
+    // User blocked
+    if (user.blocked) {
+      throw new ApplicationError("This user is disabled");
+    }
+
+    // Generate random token.
+    const resetPasswordToken = crypto.randomBytes(64).toString("hex");
+
+    const settings = await pluginStore
+      .get({ key: "email" })
+      .then((storeEmail) => {
+        try {
+          return storeEmail["reset_password"].options;
+        } catch (error) {
+          return {};
+        }
+      });
+
+    const advanced = await pluginStore.get({
+      key: "advanced",
+    });
+
+    const userInfo = await sanitizeUser(user, ctx);
+
+    settings.message = await getService("users-permissions").template(
+      settings.message,
+      {
+        URL: advanced.email_reset_password,
+        SERVER_URL: getAbsoluteServerUrl(strapi.config),
+        ADMIN_URL: getAbsoluteAdminUrl(strapi.config),
+        USER: userInfo,
+        TOKEN: resetPasswordToken,
+      }
+    );
+
+    settings.object = await getService("users-permissions").template(
+      settings.object,
+      {
+        USER: userInfo,
+      }
+    );
+
+    try {
+      // Send an email to the user.
+      await strapi
+        .plugin("email")
+        .service("email")
+        .send({
+          // to: user.email,
+          to: "marcoliberati.89@gmail.com",
+          from:
+            settings.from.email || settings.from.name
+              ? `${settings.from.name} <${process.env.SEND_GRID_DEFAULT_FROM}>`
+              : undefined,
+          replyTo: settings.response_email,
+          subject: settings.object,
+          text: settings.message,
+          html: settings.message,
+        });
+    } catch (err) {
+      throw new ApplicationError(err.message);
+    }
+
+    // Update the user.
+    await strapi
+      .query("plugin::users-permissions.user")
+      .update({ where: { id: user.id }, data: { resetPasswordToken } });
+
+    ctx.send({ ok: true });
+  };
+
+  plugin.controllers.user.resetPassword = async (ctx) => {
+    const params = _.assign({}, ctx.request.body, ctx.params);
+
+    if (
+      params.password &&
+      params.passwordConfirmation &&
+      params.password === params.passwordConfirmation &&
+      params.code
+    ) {
+      const user = await strapi
+        .query("plugin::users-permissions.user")
+        .findOne({
+          where: {
+            resetPasswordToken: `${params.code}`,
+          },
+        });
+
+      if (!user) {
+        throw new ValidationError("Incorrect code provided");
+      }
+
+      await getService("user").edit(user.id, {
+        resetPasswordToken: null,
+        password: params.password,
+      });
+      // Update the user.
+      ctx.send({
+        jwt: getService("jwt").issue({ id: user.id }),
+        user: await sanitizeUser(user, ctx),
+      });
+    } else if (
+      params.password &&
+      params.passwordConfirmation &&
+      params.password !== params.passwordConfirmation
+    ) {
+      throw new ValidationError("Passwords do not match");
+    } else {
+      throw new ValidationError("Incorrect params provided");
+    }
+  };
+
+  plugin.controllers.user.getUserStore = async (ctx) => {
+    let data, meta;
+    //take user sales
+    ctx.query = {
+      ...ctx.query,
+      filters: {
+        ...ctx.query.filters,
+        isSales: {
+          $eq: true,
+        },
+      },
+      populate: ["role", "opportunities", "store"],
+    };
+    const users = await strapi.entityService.findMany(
+      "plugin::users-permissions.user",
+      ctx.query
+    );
+
+    data = users;
+    meta = { pagination: {} };
+    return { data, meta };
+  };
+
+  plugin.controllers.user.createUserRefine = async (ctx) => {
+    const advanced = await strapi
+      .store({ type: "plugin", name: "users-permissions", key: "advanced" })
+      .get();
+
+    await validateCreateUserBody(ctx.request.body);
+
+    const { email, username, role } = ctx.request.body;
+
+    const userWithSameUsername = await strapi
+      .query("plugin::users-permissions.user")
+      .findOne({ where: { username } });
+
+    if (userWithSameUsername) {
+      if (!email) throw new ApplicationError("Username already taken");
+    }
+
+    if (advanced.unique_email) {
+      const userWithSameEmail = await strapi
+        .query("plugin::users-permissions.user")
+        .findOne({ where: { email: email.toLowerCase() } });
+
+      if (userWithSameEmail) {
+        throw new ApplicationError("Email already taken");
+      }
+    }
+
+    const user = {
+      ...ctx.request.body,
+      provider: "cmr",
+    };
+
+    user.email = _.toLower(user.email);
+
+    if (!role) {
+      const defaultRole = await strapi
+        .query("plugin::users-permissions.role")
+        .findOne({ where: { type: advanced.default_role } });
+
+      user.role = defaultRole.id;
+    }
+
+    try {
+      const data = await getService("user").add({
+        ...user,
+        isSales: true,
+        isAdmin: false,
+        isSuperAdmin: false,
+        blocked: true,
+        confirmed: true,
+      });
+      const sanitizedData = await sanitizeOutput(data, ctx);
+
+      ctx.created(sanitizedData);
+    } catch (error) {
+      throw new ApplicationError(error.message);
+    }
+  };
+
+  plugin.controllers.user.updateUserRefine = async (ctx) => {
+    const advancedConfigs = await strapi
+      .store({ type: "plugin", name: "users-permissions", key: "advanced" })
+      .get();
+
+    const { id } = ctx.params;
+    const { email, username, password } = ctx.request.body;
+
+    const user = await getService("user").fetch(id);
+    await validateUpdateUserBody(ctx.request.body);
+
+    if (
+      (user.provider === "local" || provider === "cmr") &&
+      _.has(ctx.request.body, "password") &&
+      !password
+    ) {
+      throw new ValidationError("password.notNull");
+    }
+
+    if (_.has(ctx.request.body, "username")) {
+      const userWithSameUsername = await strapi
+        .query("plugin::users-permissions.user")
+        .findOne({ where: { username } });
+
+      if (userWithSameUsername && userWithSameUsername.id != id) {
+        throw new ApplicationError("Username already taken");
+      }
+    }
+
+    if (_.has(ctx.request.body, "email") && advancedConfigs.unique_email) {
+      const userWithSameEmail = await strapi
+        .query("plugin::users-permissions.user")
+        .findOne({ where: { email: email.toLowerCase() } });
+
+      if (userWithSameEmail && userWithSameEmail.id != id) {
+        throw new ApplicationError("Email already taken");
+      }
+      ctx.request.body.email = ctx.request.body.email.toLowerCase();
+    }
+
+    if (ctx.request.body.data) {
+      ctx.request.body = { ...ctx.request.body.data };
+    }
+
+    let updateData = {
+      ...ctx.request.body,
+      isSales: true,
+      isAdmin: false,
+      isSuperAdmin: false,
+      confirmed: true,
+    };
+
+    const data = await getService("user").edit(user.id, updateData);
+    const sanitizedData = await sanitizeOutput(data, ctx);
+
+    ctx.send(sanitizedData);
+  };
+
   // user routing
   // /:store/auth/local
   plugin.routes["content-api"].routes.push({
@@ -567,11 +850,27 @@ module.exports = (plugin) => {
       prefix: "",
     },
   });
+  plugin.routes["content-api"].routes.push({
+    method: "POST",
+    path: "/v1/auth/forgot-password",
+    handler: "user.forgotPassword",
+    config: {
+      prefix: "",
+    },
+  });
 
   // /:store/auth/reset-password
   plugin.routes["content-api"].routes.push({
     method: "POST",
     path: "/:store/auth/reset-password",
+    handler: "user.resetPassword",
+    config: {
+      prefix: "",
+    },
+  });
+  plugin.routes["content-api"].routes.push({
+    method: "POST",
+    path: "/v1/auth/reset-password",
     handler: "user.resetPassword",
     config: {
       prefix: "",
@@ -583,6 +882,32 @@ module.exports = (plugin) => {
     method: "PUT",
     path: "/:store/users",
     handler: "user.update",
+    config: {
+      prefix: "",
+    },
+  });
+  plugin.routes["content-api"].routes.push({
+    method: "PUT",
+    path: "/v1/users/controlled/:id",
+    handler: "user.updateUserRefine",
+    config: {
+      prefix: "",
+    },
+  });
+  plugin.routes["content-api"].routes.push({
+    method: "POST",
+    path: "/v1/users/controlled",
+    handler: "user.createUserRefine",
+    config: {
+      prefix: "",
+    },
+  });
+
+  // /users/getUserStore
+  plugin.routes["content-api"].routes.push({
+    method: "GET",
+    path: "/v1/users/store",
+    handler: "user.getUserStore",
     config: {
       prefix: "",
     },

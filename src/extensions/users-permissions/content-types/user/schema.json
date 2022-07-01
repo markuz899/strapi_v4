@@ -58,7 +58,7 @@
     },
     "store": {
       "type": "relation",
-      "relation": "manyToOne",
+      "relation": "manyToMany",
       "target": "api::store.store",
       "inversedBy": "users"
     },
@@ -70,7 +70,31 @@
     "username": {
       "type": "string",
       "unique": false,
-      "configurable": true
+      "minLength": 3
+    },
+    "isAdmin": {
+      "type": "boolean",
+      "default": false
+    },
+    "name": {
+      "type": "string"
+    },
+    "surname": {
+      "type": "string"
+    },
+    "isSales": {
+      "type": "boolean",
+      "default": false
+    },
+    "opportunities": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::opportunity.opportunity",
+      "mappedBy": "users_sales"
+    },
+    "isSuperAdmin": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

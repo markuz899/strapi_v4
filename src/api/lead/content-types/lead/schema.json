@@ -4,7 +4,8 @@
   "info": {
     "singularName": "lead",
     "pluralName": "leads",
-    "displayName": "Lead"
+    "displayName": "Lead",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -53,13 +54,46 @@
     "car_make": {
       "type": "json"
     },
-    "store": {
-      "type": "string"
-    },
     "vehicle": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::vehicle.vehicle"
+    },
+    "store": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::store.store"
+    },
+    "note": {
+      "type": "richtext"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "open",
+        "contacted",
+        "close-positive",
+        "close-negative"
+      ],
+      "default": "open"
+    },
+    "users_sales": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "opportunity": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::opportunity.opportunity",
+      "mappedBy": "lead"
+    },
+    "verificationCode": {
+      "type": "biginteger"
+    },
+    "confirmed": {
+      "type": "boolean",
+      "default": false
     }
   }
 }
