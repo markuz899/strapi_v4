@@ -4,6 +4,7 @@ const { createCoreController } = require("@strapi/strapi").factories;
 const entity = "api::lead.lead";
 const opportunitieEntity = "api::opportunity.opportunity";
 const notificationEntity = "api::notification.notification";
+const lead = require("../routes/lead");
 const { assignOpportunities } = require("./");
 
 module.exports = createCoreController(entity, ({ strapi }) => ({
@@ -20,46 +21,27 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
     const stores = await strapi.service("api::store.store").find();
     const currentStore = stores?.results?.find((el) => el.name === storeName);
 
-    //sales selected
-    let userSalesSelected = await assignOpportunities(
-      ctx,
-      strapi,
-      currentStore
-    );
-
-    //////////////////////////////////////START MAGIC///////////////////////////////////////////////
-
+    let lead;
     try {
-      let lead = await strapi.service(entity).create({
+      let verificationCode = Math.floor(Math.random() * 90000) + 100000;
+      lead = await strapi.service(entity).create({
         data: {
           ...body,
           store: currentStore?.id || null,
-          users_sales: userSalesSelected ? userSalesSelected.id : null,
           publishedAt: new Date(),
+          verificationCode,
+          confirmed: false,
         },
       });
 
-      // create an opportunity from lead
-      await strapi.service(opportunitieEntity).create({
-        data: {
-          ...body,
-          store: currentStore?.id || null,
-          users_sales: userSalesSelected ? userSalesSelected.id : null,
-          lead: lead.id,
-          publishedAt: new Date(),
-        },
+      // send verificationCode to email
+      await strapi.plugins["email"].services.email.send({
+        to: lead.email,
+        from: process.env.defaultFrom,
+        subject: "Conferma codice OTP",
+        text: `${verificationCode} è il codice di verifica OTP`,
       });
-      // create a notification from lead
-      await strapi.service(notificationEntity).create({
-        data: {
-          text: `Ti è stata assegnata una lead con email ${lead.email}`,
-          users_sales: userSalesSelected ? userSalesSelected.id : null,
-          store: currentStore?.id || null,
-          lead: lead.id || null,
-          link: lead.id || null,
-          publishedAt: new Date(),
-        },
-      });
+
       strapi.log.debug(`Lead created from portal - ${lead.id}`);
     } catch (err) {
       strapi.log.error(`Error in create lead`);
@@ -67,8 +49,103 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
     }
 
     return {
+      ids: lead.id,
       status: true,
     };
+  },
+
+  async confirmLead(ctx) {
+    const { id } = ctx.params;
+    const { body } = ctx.request;
+
+    //take id from storeName
+    const storeName = ctx.params.store;
+    const stores = await strapi.service("api::store.store").find();
+    const currentStore = stores?.results?.find((el) => el.name === storeName);
+
+    try {
+      // get lead from id
+      const currentLead = await strapi.service(entity).findOne(id, {});
+
+      // verify verificationCode and confirm lead
+      if (currentLead.verificationCode === body.verificationCode) {
+        //////////////////////////////////////START MAGIC///////////////////////////////////////////////
+
+        //sales selected
+        let userSalesSelected = await assignOpportunities(
+          ctx,
+          strapi,
+          currentStore
+        );
+
+        await strapi.service(entity).update(id, {
+          data: {
+            users_sales: userSalesSelected ? userSalesSelected.id : null,
+            verificationCode: null,
+            confirmed: true,
+          },
+        });
+
+        // create an opportunity from lead
+        await strapi.service(opportunitieEntity).create({
+          data: {
+            ...currentLead,
+            store: currentStore?.id || null,
+            users_sales: userSalesSelected ? userSalesSelected.id : null,
+            lead: currentLead.id,
+            publishedAt: new Date(),
+          },
+        });
+        // create a notification from lead
+        await strapi.service(notificationEntity).create({
+          data: {
+            text: `Ti è stata assegnata una lead con email ${currentLead.email}`,
+            users_sales: userSalesSelected ? userSalesSelected.id : null,
+            store: currentStore?.id || null,
+            lead: currentLead.id || null,
+            link: currentLead.id || null,
+            publishedAt: new Date(),
+          },
+        });
+
+        strapi.log.debug(`Lead confirmed from portal - ${id}`);
+        return {
+          status: true,
+        };
+      }
+    } catch (err) {
+      strapi.log.error(`Error in confirm lead`);
+      return {
+        status: false,
+        msg: "codice OTP errato",
+      };
+    }
+  },
+
+  async refreshCode(ctx) {
+    const { body } = ctx.request;
+
+    let verificationCode = Math.floor(Math.random() * 90000) + 100000;
+
+    try {
+      await strapi.service(entity).update(body.ids, {
+        data: {
+          verificationCode,
+        },
+      });
+
+      strapi.log.debug(`Refresh Lead OTP - ${body.ids}`);
+
+      return {
+        status: true,
+      };
+    } catch (err) {
+      strapi.log.error(`Error in Refresh OTP lead`);
+      return {
+        status: false,
+        msg: "codice OTP errato",
+      };
+    }
   },
 
   async createRefine(ctx) {

@@ -7,6 +7,16 @@ module.exports = {
     },
     {
       method: "POST",
+      path: "/:store/confirm-leads/:id",
+      handler: "lead.confirmLead",
+    },
+    {
+      method: "POST",
+      path: "/:store/refresh-code",
+      handler: "lead.refreshCode",
+    },
+    {
+      method: "POST",
       path: "/leads",
       handler: "lead.createRefine",
     },

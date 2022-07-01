@@ -87,6 +87,13 @@
       "relation": "oneToOne",
       "target": "api::opportunity.opportunity",
       "mappedBy": "lead"
+    },
+    "verificationCode": {
+      "type": "biginteger"
+    },
+    "confirmed": {
+      "type": "boolean",
+      "default": false
     }
   }
 }
