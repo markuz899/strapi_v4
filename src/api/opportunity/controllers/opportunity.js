@@ -68,10 +68,12 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
           status: status[body.data.status],
         },
       });
-      strapi.log.debug(`Opportunity update from cmr`)
+      strapi.log.debug(`Opportunity update from cmr`);
       return result;
     } catch (err) {
-      strapi.log.error(`Error in update opportunity id ${opportunity.id}`)
+      strapi.log.error(
+        `Error in update opportunity id ${opportunity.id} - ${err}`
+      );
     }
   },
 
@@ -86,7 +88,7 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
       await strapi.service(entityLead).update(opportunity.lead.id, {
         data: {
           users_sales: null,
-          status: "close",
+          status: "close-negative",
         },
       });
 
@@ -94,7 +96,9 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
       const sanitizedEntity = await this.sanitizeOutput(del, ctx);
       return this.transformResponse(sanitizedEntity);
     } catch (err) {
-      strapi.log.error(`Error in delete opportunity id ${opportunity.id}`)
+      strapi.log.error(
+        `Error in delete opportunity id ${opportunity.id} - ${err}`
+      );
     }
   },
 }));
