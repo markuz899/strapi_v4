@@ -722,7 +722,7 @@ module.exports = (plugin) => {
 
     const user = {
       ...ctx.request.body,
-      provider: "cmr",
+      provider: "local",
     };
 
     user.email = _.toLower(user.email);
