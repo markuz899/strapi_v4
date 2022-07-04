@@ -25,6 +25,7 @@ module.exports = ({ env }) => ({
           clientId: env("CLIENT_ID"),
           clientSecret: env("CLIENT_SECRET"),
           refreshToken: env("REFRESH_TOKEN"),
+          accessToken: env("ACCESS_TOKEN"),
         },
       },
       settings: {
