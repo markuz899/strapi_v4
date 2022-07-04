@@ -14,6 +14,7 @@
   "dependencies": {
     "@strapi/plugin-i18n": "4.1.11",
     "@strapi/plugin-users-permissions": "4.1.11",
+    "@strapi/provider-email-nodemailer": "^4.2.2",
     "@strapi/provider-email-sendgrid": "^4.1.11",
     "@strapi/strapi": "4.1.11",
     "mysql": "2.18.1",
