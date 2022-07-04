@@ -15,7 +15,9 @@ module.exports = ({ env }) => ({
       provider: "nodemailer",
       providerOptions: {
         service: "gmail",
+        host: env("SMTP_HOST", "smtp.google.com"),
         port: env("SMTP_PORT", 587),
+        secure: false,
         auth: {
           type: "OAuth2",
           user: env("EMAIL"),
