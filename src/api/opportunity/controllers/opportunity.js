@@ -49,13 +49,6 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
     const { id } = ctx.params;
     const { body } = ctx.request;
 
-    let status = {
-      open: "created",
-      contacted: "progress",
-      "close-positive": "close",
-      "close-negative": "close",
-    };
-
     const opportunity = await strapi.service(entity).findOne(id, {
       populate: ["store", "vehicle", "users_sales", "lead"],
     });
@@ -65,7 +58,7 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
     try {
       await strapi.service(entityLead).update(opportunity.lead.id, {
         data: {
-          status: status[body.data.status],
+          status: body.data.status,
         },
       });
       strapi.log.debug(`Opportunity update from cmr`);
