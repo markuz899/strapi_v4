@@ -1,3 +1,5 @@
+const axios = require("axios");
+
 module.exports = {
   assignOpportunities: async (ctx, strapi, currentStore) => {
     //take only user sales
@@ -41,5 +43,20 @@ module.exports = {
     });
 
     return minUserWorkers.user;
+  },
+  getPositionFromCity: async (city) => {
+    try {
+      let query = `http://api.openweathermap.org/geo/1.0/direct?q={${city}}&appid=${process.env.OPEN_WEATHER}`;
+      const position = await axios.get(query);
+      if (position.status === 200 && position.data) {
+        strapi.log.debug(`Position calculated`);
+        return position.data.length
+          ? { lat: position.data[0].lat || 0, lon: position.data[0].lon || 0 }
+          : {};
+      }
+      strapi.log.error(`Error in getPositionFromCity`);
+    } catch (err) {
+      strapi.log.error(`Error in getPositionFromCity`, err);
+    }
   },
 };

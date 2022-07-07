@@ -4,8 +4,7 @@ const { createCoreController } = require("@strapi/strapi").factories;
 const entity = "api::lead.lead";
 const opportunitieEntity = "api::opportunity.opportunity";
 const notificationEntity = "api::notification.notification";
-const lead = require("../routes/lead");
-const { assignOpportunities } = require("./");
+const { assignOpportunities,getPositionFromCity } = require("./");
 
 module.exports = createCoreController(entity, ({ strapi }) => ({
   async create(ctx) {
@@ -24,11 +23,13 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
     let lead;
     try {
       let verificationCode = Math.floor(Math.random() * 90000) + 100000;
+      let position = await getPositionFromCity(body.city)
       lead = await strapi.service(entity).create({
         data: {
           ...body,
           store: currentStore?.id || null,
           publishedAt: new Date(),
+          position,
           verificationCode,
           confirmed: false,
         },

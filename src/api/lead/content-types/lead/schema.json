@@ -94,6 +94,9 @@
     "confirmed": {
       "type": "boolean",
       "default": false
+    },
+    "position": {
+      "type": "json"
     }
   }
 }
