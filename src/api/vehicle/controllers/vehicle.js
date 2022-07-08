@@ -114,7 +114,7 @@ module.exports = createCoreController("api::vehicle.vehicle", ({ strapi }) => ({
         store: data.store ? data.store.name : "",
       };
 
-      await incrementVisited(ctx, strapi, data);
+      await incrementVisited(strapi, data);
 
       return compose;
     } catch (err) {
