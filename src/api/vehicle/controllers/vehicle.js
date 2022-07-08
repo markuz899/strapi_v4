@@ -3,7 +3,7 @@
 /**
  *  vehicle controller
  */
-
+const { incrementVisited } = require("./");
 const { createCoreController } = require("@strapi/strapi").factories;
 const entity = "api::vehicle.vehicle";
 
@@ -102,17 +102,24 @@ module.exports = createCoreController("api::vehicle.vehicle", ({ strapi }) => ({
       },
       populate: ["store", "category", "make", "type", "image"],
     };
-    const data = await strapi.db.query(entity).findOne({ ...ctx.query });
 
-    let compose = {
-      ...data,
-      make: data.make ? data.make.name : "",
-      type: data.type ? data.type.name : "",
-      category: data.category ? data.category.name : "",
-      store: data.store ? data.store.name : "",
-    };
+    try {
+      const data = await strapi.db.query(entity).findOne({ ...ctx.query });
 
-    return compose;
+      let compose = {
+        ...data,
+        make: data.make ? data.make.name : "",
+        type: data.type ? data.type.name : "",
+        category: data.category ? data.category.name : "",
+        store: data.store ? data.store.name : "",
+      };
+
+      await incrementVisited(ctx, strapi, data);
+
+      return compose;
+    } catch (err) {
+      strapi.log.error(`Error in findOne vehicle`, err);
+    }
   },
 
   async findMake(ctx) {

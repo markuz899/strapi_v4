@@ -139,6 +139,10 @@
       "allowedTypes": [
         "images"
       ]
+    },
+    "visited": {
+      "type": "integer",
+      "default": 0
     }
   }
 }
