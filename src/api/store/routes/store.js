@@ -16,5 +16,13 @@ module.exports = {
         policies: [],
       },
     },
+    {
+      method: "GET",
+      path: "/:store/store",
+      handler: "store.findOne",
+      config: {
+        policies: [],
+      },
+    },
   ],
 };

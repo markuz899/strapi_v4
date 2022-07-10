@@ -29,4 +29,22 @@ module.exports = createCoreController("api::store.store", ({ strapi }) => ({
 
     return this.transformResponse(sanitizedEntity);
   },
+  async findOne(ctx) {
+    const { store } = ctx.params;
+    const { query } = ctx;
+
+    let querys = {
+      ...query,
+      where: {
+        name: {
+          $eq: store,
+        },
+      },
+      populate: ["logo"],
+    };
+
+    const stores = await strapi.db.query(entity).findOne(querys);
+
+    return stores;
+  },
 }));
