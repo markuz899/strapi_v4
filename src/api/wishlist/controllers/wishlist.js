@@ -58,7 +58,6 @@ module.exports = {
             let vehicle = await getVehicle(el.id);
             wishlist.push({
               ...vehicle,
-              make: vehicle.make ? vehicle.make.name : null,
             });
           })
         );
