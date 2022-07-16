@@ -216,26 +216,34 @@ module.exports = createCoreController("api::vehicle.vehicle", ({ strapi }) => ({
   },
   async createOneRefine(ctx) {
     const { body } = ctx.request;
-
-    if (body.title === "") return;
-    const result = await strapi.service("api::vehicle.vehicle").create(body);
-    return result;
+    try {
+      const result = await strapi.service(entity).create(body);
+      return result;
+    } catch (err) {
+      strapi.log.error(`Error in createOneRefine`, err);
+    }
   },
   async updateOneRefine(ctx) {
     const { id } = ctx.params;
     const { body } = ctx.request;
+    try {
+      const result = await strapi
+        .service("api::vehicle.vehicle")
+        .update(id, body);
 
-    const result = await strapi
-      .service("api::vehicle.vehicle")
-      .update(id, body);
-
-    return result;
+      return result;
+    } catch (err) {
+      strapi.log.error(`Error in updateOneRefine`, err);
+    }
   },
   async deleteOneRefine(ctx) {
     const { id } = ctx.params;
-    const entity = await strapi.service("api::vehicle.vehicle").delete(id);
-
-    const sanitizedEntity = await this.sanitizeOutput(entity, ctx);
-    return this.transformResponse(sanitizedEntity);
+    try {
+      const entity = await strapi.service("api::vehicle.vehicle").delete(id);
+      const sanitizedEntity = await this.sanitizeOutput(entity, ctx);
+      return this.transformResponse(sanitizedEntity);
+    } catch (err) {
+      strapi.log.error(`Error in deleteOneRefine`, err);
+    }
   },
 }));
