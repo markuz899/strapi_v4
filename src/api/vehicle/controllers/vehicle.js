@@ -58,7 +58,7 @@ module.exports = createCoreController("api::vehicle.vehicle", ({ strapi }) => ({
         },
       },
       sort: [query._sort],
-      populate: ["store", "category", "make", "type", "image"],
+      populate: ["store", "category", "make", "type", "image", "vendor"],
     };
 
     const data = await strapi.service(entity).find({
@@ -100,7 +100,7 @@ module.exports = createCoreController("api::vehicle.vehicle", ({ strapi }) => ({
           $eq: slug,
         },
       },
-      populate: ["store", "category", "make", "type", "image"],
+      populate: ["store", "category", "make", "type", "image", "vendor"],
     };
 
     try {
@@ -139,7 +139,7 @@ module.exports = createCoreController("api::vehicle.vehicle", ({ strapi }) => ({
           },
         },
       },
-      populate: ["store", "category", "make", "type", "image"],
+      populate: ["store", "category", "make", "type", "image", "vendor"],
     };
 
     const data = await strapi.service(entity).find({
@@ -178,7 +178,7 @@ module.exports = createCoreController("api::vehicle.vehicle", ({ strapi }) => ({
           $eq: model,
         },
       },
-      populate: ["store", "category", "make", "type", "image"],
+      populate: ["store", "category", "make", "type", "image", "vendor"],
     };
 
     const data = await strapi.service(entity).find({
