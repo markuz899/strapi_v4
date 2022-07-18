@@ -4,7 +4,7 @@ const { createCoreController } = require("@strapi/strapi").factories;
 const entity = "api::lead.lead";
 const opportunitieEntity = "api::opportunity.opportunity";
 const notificationEntity = "api::notification.notification";
-const { assignOpportunities,getPositionFromCity } = require("./");
+const { assignOpportunities, getPositionFromCity } = require("./");
 
 module.exports = createCoreController(entity, ({ strapi }) => ({
   async create(ctx) {
@@ -23,7 +23,7 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
     let lead;
     try {
       let verificationCode = Math.floor(Math.random() * 90000) + 100000;
-      let position = await getPositionFromCity(body.city)
+      let position = await getPositionFromCity(body.city);
       lead = await strapi.service(entity).create({
         data: {
           ...body,
@@ -66,8 +66,9 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
 
     try {
       // get lead from id
-      const currentLead = await strapi.service(entity).findOne(id, {});
-
+      const currentLead = await strapi.service(entity).findOne(id, {
+        populate: ["vehicle"],
+      });
       // verify verificationCode and confirm lead
       if (currentLead.verificationCode === body.verificationCode) {
         //////////////////////////////////////START MAGIC///////////////////////////////////////////////
