@@ -226,6 +226,17 @@ module.exports = createCoreController("api::vehicle.vehicle", ({ strapi }) => ({
   async updateOneRefine(ctx) {
     const { id } = ctx.params;
     const { body } = ctx.request;
+
+    // check the deal inside vehicle update
+    if (Object.keys(body.data).length === 1) {
+      if (body.data.publishedAt !== null) {
+        const vehicle = await strapi.service(entity).findOne(id);
+        if (!vehicle?.deals || !vehicle?.optionsDeal) {
+          throw new Error("Invalid vehicle deals");
+        }
+      }
+    }
+
     try {
       const result = await strapi
         .service("api::vehicle.vehicle")
