@@ -7,20 +7,24 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
   async createRefine(ctx) {
     const { body } = ctx.request;
 
-    //take id from storeName
-    const stores = await strapi.service("api::store.store").find();
-    const currentStore = stores?.results?.find(
-      (el) => el.id === body.data.store
-    );
+    try {
+      //take id from storeName
+      const stores = await strapi.service("api::store.store").find();
+      const currentStore = stores?.results?.find(
+        (el) => el.id === body.data.store
+      );
 
-    const result = await strapi.service(entity).create({
-      data: {
-        ...body.data,
-        stores: currentStore?.id || null,
-        publishedAt: new Date(),
-      },
-    });
-    return result;
+      const result = await strapi.service(entity).create({
+        data: {
+          ...body.data,
+          stores: currentStore?.id || null,
+          publishedAt: new Date(),
+        },
+      });
+      return result;
+    } catch (error) {
+      strapi.log.error("Error in createRefine notification", error);
+    }
   },
 
   async findRefine(ctx) {
@@ -42,47 +46,63 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
       };
     }
 
-    const { data, meta } = await super.find(ctx);
+    try {
+      const { data, meta } = await super.find(ctx);
 
-    return { data, meta };
+      return { data, meta };
+    } catch (error) {
+      strapi.log.error("Error in findRefine notification", error);
+    }
   },
 
   async findOneRefine(ctx) {
     const { id } = ctx.params;
     const { query } = ctx;
 
-    const one = await strapi.service(entity).findOne(id, query);
-    const sanitizedEntity = await this.sanitizeOutput(one, ctx);
+    try {
+      const one = await strapi.service(entity).findOne(id, query);
+      const sanitizedEntity = await this.sanitizeOutput(one, ctx);
 
-    return this.transformResponse(sanitizedEntity);
+      return this.transformResponse(sanitizedEntity);
+    } catch (error) {
+      strapi.log.error("Error in findOneRefine notification", error);
+    }
   },
 
   async updateOneRefine(ctx) {
     const { id } = ctx.params;
     const { body } = ctx.request;
 
-    //take id from storeName
-    const stores = await strapi.service("api::store.store").find();
-    const currentStore = stores?.results?.find(
-      (el) => el.id === body.data.store
-    );
+    try {
+      //take id from storeName
+      const stores = await strapi.service("api::store.store").find();
+      const currentStore = stores?.results?.find(
+        (el) => el.id === body.data.store
+      );
 
-    const result = await strapi.service(entity).update(id, {
-      data: {
-        ...body.data,
-        store: currentStore?.id || null,
-        // vehicles: body.data.vehicle_list || [],
-      },
-    });
+      const result = await strapi.service(entity).update(id, {
+        data: {
+          ...body.data,
+          store: currentStore?.id || null,
+          // vehicles: body.data.vehicle_list || [],
+        },
+      });
 
-    return result;
+      return result;
+    } catch (error) {
+      strapi.log.error("Error in updateOneRefine notification", error);
+    }
   },
 
   async deleteOneRefine(ctx) {
     const { id } = ctx.params;
-    const lead = await strapi.service(entity).delete(id);
+    try {
+      const lead = await strapi.service(entity).delete(id);
 
-    const sanitizedEntity = await this.sanitizeOutput(lead, ctx);
-    return this.transformResponse(sanitizedEntity);
+      const sanitizedEntity = await this.sanitizeOutput(lead, ctx);
+      return this.transformResponse(sanitizedEntity);
+    } catch (error) {
+      strapi.log.error("Error in deleteOneRefine notification", error);
+    }
   },
 }));

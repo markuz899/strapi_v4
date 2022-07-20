@@ -46,35 +46,40 @@ module.exports = createCoreController("api::vehicle.vehicle", ({ strapi }) => ({
     const { query, params } = ctx;
     const store = params.store;
     if (!store) return {};
-    const filters = await this.queryFilters(query);
 
-    ctx.query = {
-      filters: {
-        ...filters,
-        store: {
-          name: {
-            $eq: store,
+    try {
+      const filters = await this.queryFilters(query);
+
+      ctx.query = {
+        filters: {
+          ...filters,
+          store: {
+            name: {
+              $eq: store,
+            },
           },
         },
-      },
-      sort: [query._sort],
-      populate: ["store", "category", "make", "type", "image", "vendor"],
-    };
+        sort: [query._sort],
+        populate: ["store", "category", "make", "type", "image", "vendor"],
+      };
 
-    const data = await strapi.service(entity).find({
-      ...ctx.query,
-    });
+      const data = await strapi.service(entity).find({
+        ...ctx.query,
+      });
 
-    let compose = data.results.map((el) => ({
-      ...el,
-      optionals: el.optionals ? el.optionals.split(";") : [],
-      make: el.make ? el.make.name : null,
-      type: el.type ? el.type.name : null,
-      category: el.category ? el.category.name : null,
-      store: el.store ? el.store.name : null,
-    }));
+      let compose = data.results.map((el) => ({
+        ...el,
+        optionals: el.optionals ? el.optionals.split(";") : [],
+        make: el.make ? el.make.name : null,
+        type: el.type ? el.type.name : null,
+        category: el.category ? el.category.name : null,
+        store: el.store ? el.store.name : null,
+      }));
 
-    return compose;
+      return compose;
+    } catch (error) {
+      strapi.log.error("Error in find vehicle", error);
+    }
   },
 
   async findOne(ctx) {
@@ -142,20 +147,24 @@ module.exports = createCoreController("api::vehicle.vehicle", ({ strapi }) => ({
       populate: ["store", "category", "make", "type", "image", "vendor"],
     };
 
-    const data = await strapi.service(entity).find({
-      ...ctx.query,
-    });
+    try {
+      const data = await strapi.service(entity).find({
+        ...ctx.query,
+      });
 
-    let compose = data.results.map((el) => ({
-      ...el,
-      optionals: el.optionals ? el.optionals.split(";") : [],
-      make: el.make ? el.make.name : null,
-      type: el.type ? el.type.name : null,
-      category: el.category ? el.category.name : null,
-      store: el.store ? el.store.name : null,
-    }));
+      let compose = data.results.map((el) => ({
+        ...el,
+        optionals: el.optionals ? el.optionals.split(";") : [],
+        make: el.make ? el.make.name : null,
+        type: el.type ? el.type.name : null,
+        category: el.category ? el.category.name : null,
+        store: el.store ? el.store.name : null,
+      }));
 
-    return compose;
+      return compose;
+    } catch (error) {
+      strapi.log.error("Error in findMake vehicle", error);
+    }
   },
 
   async findMakeModel(ctx) {
@@ -181,38 +190,50 @@ module.exports = createCoreController("api::vehicle.vehicle", ({ strapi }) => ({
       populate: ["store", "category", "make", "type", "image", "vendor"],
     };
 
-    const data = await strapi.service(entity).find({
-      ...ctx.query,
-    });
+    try {
+      const data = await strapi.service(entity).find({
+        ...ctx.query,
+      });
 
-    let compose = data.results.map((el) => ({
-      ...el,
-      optionals: el.optionals ? el.optionals.split(";") : [],
-      make: el.make ? el.make.name : null,
-      type: el.type ? el.type.name : null,
-      category: el.category ? el.category.name : null,
-      store: el.store ? el.store.name : null,
-    }));
+      let compose = data.results.map((el) => ({
+        ...el,
+        optionals: el.optionals ? el.optionals.split(";") : [],
+        make: el.make ? el.make.name : null,
+        type: el.type ? el.type.name : null,
+        category: el.category ? el.category.name : null,
+        store: el.store ? el.store.name : null,
+      }));
 
-    return compose;
+      return compose;
+    } catch (error) {
+      strapi.log.error("Error in findMakeModel vehicle", error);
+    }
   },
   async findRefine(ctx) {
     ctx.query = { ...ctx.query, local: "en" };
 
-    const { data, meta } = await super.find(ctx);
+    try {
+      const { data, meta } = await super.find(ctx);
 
-    return { data, meta };
+      return { data, meta };
+    } catch (error) {
+      strapi.log.error("Error in findRefine vehicle", error);
+    }
   },
   async findOneRefine(ctx) {
     const { id } = ctx.params;
     const { query } = ctx;
 
-    const entity = await strapi
-      .service("api::vehicle.vehicle")
-      .findOne(id, query);
-    const sanitizedEntity = await this.sanitizeOutput(entity, ctx);
+    try {
+      const entity = await strapi
+        .service("api::vehicle.vehicle")
+        .findOne(id, query);
+      const sanitizedEntity = await this.sanitizeOutput(entity, ctx);
 
-    return this.transformResponse(sanitizedEntity);
+      return this.transformResponse(sanitizedEntity);
+    } catch (error) {
+      strapi.log.error("Error in findOneRefine vehicle", error);
+    }
   },
   async createOneRefine(ctx) {
     const { body } = ctx.request;
@@ -227,17 +248,16 @@ module.exports = createCoreController("api::vehicle.vehicle", ({ strapi }) => ({
     const { id } = ctx.params;
     const { body } = ctx.request;
 
-    // check the deal inside vehicle update
-    if (Object.keys(body.data).length === 1) {
-      if (body.data.publishedAt !== null) {
-        const vehicle = await strapi.service(entity).findOne(id);
-        if (!vehicle?.deals || !vehicle?.optionsDeal) {
-          throw new Error("Invalid vehicle deals");
+    try {
+      // check the deal inside vehicle update
+      if (Object.keys(body.data).length === 1) {
+        if (body.data.publishedAt !== null) {
+          const vehicle = await strapi.service(entity).findOne(id);
+          if (!vehicle?.deals || !vehicle?.optionsDeal) {
+            throw new Error("Invalid vehicle deals");
+          }
         }
       }
-    }
-
-    try {
       const result = await strapi
         .service("api::vehicle.vehicle")
         .update(id, body);

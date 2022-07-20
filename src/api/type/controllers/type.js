@@ -13,17 +13,25 @@ module.exports = createCoreController("api::type.type", ({ strapi }) => ({
     const store = params.store;
     if (!store) return {};
 
-    const data = await strapi.service(entity).find({
-      ...ctx.query,
-    });
+    try {
+      const data = await strapi.service(entity).find({
+        ...ctx.query,
+      });
 
-    return data.results;
+      return data.results;
+    } catch (error) {
+      strapi.log.error("Error in find type", error);
+    }
   },
   async findRefine(ctx) {
     ctx.query = { ...ctx.query, local: "en" };
 
-    const { data, meta } = await super.find(ctx);
+    try {
+      const { data, meta } = await super.find(ctx);
 
-    return { data, meta };
+      return { data, meta };
+    } catch (error) {
+      strapi.log.error("Error in findRefine type", error);
+    }
   },
 }));

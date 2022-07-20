@@ -30,32 +30,39 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
       };
     }
 
-    const { data, meta } = await super.find(ctx);
+    try {
+      const { data, meta } = await super.find(ctx);
 
-    return { data, meta };
+      return { data, meta };
+    } catch (error) {
+      strapi.log.error("Error in findRefine opportunity", error);
+    }
   },
 
   async findOneRefine(ctx) {
     const { id } = ctx.params;
     const { query } = ctx;
 
-    const opp = await strapi.service(entity).findOne(id, query);
-    const sanitizedEntity = await this.sanitizeOutput(opp, ctx);
+    try {
+      const opp = await strapi.service(entity).findOne(id, query);
+      const sanitizedEntity = await this.sanitizeOutput(opp, ctx);
 
-    return this.transformResponse(sanitizedEntity);
+      return this.transformResponse(sanitizedEntity);
+    } catch (error) {
+      strapi.log.error("Error in findOneRefine opportunity", error);
+    }
   },
 
   async updateOneRefine(ctx) {
     const { id } = ctx.params;
     const { body } = ctx.request;
 
-    const opportunity = await strapi.service(entity).findOne(id, {
-      populate: ["store", "vehicle", "users_sales", "lead"],
-    });
-
-    const result = await strapi.service(entity).update(id, body);
-
     try {
+      const opportunity = await strapi.service(entity).findOne(id, {
+        populate: ["store", "vehicle", "users_sales", "lead"],
+      });
+
+      const result = await strapi.service(entity).update(id, body);
       await strapi.service(entityLead).update(opportunity.lead.id, {
         data: {
           status: body.data.status,
@@ -73,11 +80,10 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
   async deleteOneRefine(ctx) {
     const { id } = ctx.params;
 
-    const opportunity = await strapi.service(entity).findOne(id, {
-      populate: ["store", "vehicle", "users_sales", "lead"],
-    });
-
     try {
+      const opportunity = await strapi.service(entity).findOne(id, {
+        populate: ["store", "vehicle", "users_sales", "lead"],
+      });
       await strapi.service(entityLead).update(opportunity.lead.id, {
         data: {
           users_sales: null,
