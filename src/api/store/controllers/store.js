@@ -12,12 +12,11 @@ module.exports = createCoreController("api::store.store", ({ strapi }) => ({
     // some custom logic here
     ctx.query = { ...ctx.query, local: "en" };
 
-    // some more custom logic
-    meta.date = Date.now();
-
     try {
       // Calling the default core action
       const { data, meta } = await super.find(ctx);
+      // some more custom logic
+      meta.date = Date.now();
       return { data, meta };
     } catch (error) {
       strapi.log.error("Error in find store", error);
