@@ -12,22 +12,28 @@ module.exports = createCoreController("api::store.store", ({ strapi }) => ({
     // some custom logic here
     ctx.query = { ...ctx.query, local: "en" };
 
-    // Calling the default core action
-    const { data, meta } = await super.find(ctx);
-
-    // some more custom logic
-    meta.date = Date.now();
-
-    return { data, meta };
+    try {
+      // Calling the default core action
+      const { data, meta } = await super.find(ctx);
+      // some more custom logic
+      meta.date = Date.now();
+      return { data, meta };
+    } catch (error) {
+      strapi.log.error("Error in find store", error);
+    }
   },
   async findOneRefine(ctx) {
     const { id } = ctx.params;
     const { query } = ctx;
 
-    const lead = await strapi.service(entity).findOne(id, query);
-    const sanitizedEntity = await this.sanitizeOutput(lead, ctx);
+    try {
+      const lead = await strapi.service(entity).findOne(id, query);
+      const sanitizedEntity = await this.sanitizeOutput(lead, ctx);
 
-    return this.transformResponse(sanitizedEntity);
+      return this.transformResponse(sanitizedEntity);
+    } catch (error) {
+      strapi.log.error("Error in findOneRefine store", error);
+    }
   },
   async findOne(ctx) {
     const { store } = ctx.params;
@@ -43,8 +49,12 @@ module.exports = createCoreController("api::store.store", ({ strapi }) => ({
       populate: ["logo"],
     };
 
-    const stores = await strapi.db.query(entity).findOne(querys);
+    try {
+      const stores = await strapi.db.query(entity).findOne(querys);
 
-    return stores;
+      return stores;
+    } catch (error) {
+      strapi.log.error("Error in findOne store", error);
+    }
   },
 }));

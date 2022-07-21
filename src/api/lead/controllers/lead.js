@@ -16,12 +16,12 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
       throw new Error("Invalid body");
     }
 
-    //take id from storeName
-    const stores = await strapi.service("api::store.store").find();
-    const currentStore = stores?.results?.find((el) => el.name === storeName);
-
-    let lead;
     try {
+      //take id from storeName
+      const stores = await strapi.service("api::store.store").find();
+      const currentStore = stores?.results?.find((el) => el.name === storeName);
+
+      let lead;
       let verificationCode = Math.floor(Math.random() * 90000) + 100000;
       let position = await getPositionFromCity(body.city);
       lead = await strapi.service(entity).create({
@@ -45,7 +45,7 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
 
       strapi.log.debug(`Lead created from portal - ${lead.id}`);
     } catch (err) {
-      strapi.log.error(`Error in create lead`);
+      strapi.log.error(`Error in create lead`, err);
       throw new Error(err);
     }
 
@@ -61,10 +61,11 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
 
     //take id from storeName
     const storeName = ctx.params.store;
-    const stores = await strapi.service("api::store.store").find();
-    const currentStore = stores?.results?.find((el) => el.name === storeName);
 
     try {
+      const stores = await strapi.service("api::store.store").find();
+      const currentStore = stores?.results?.find((el) => el.name === storeName);
+
       // get lead from id
       const currentLead = await strapi.service(entity).findOne(id, {
         populate: ["vehicle"],
@@ -116,7 +117,7 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
         };
       }
     } catch (err) {
-      strapi.log.error(`Error in confirm lead`);
+      strapi.log.error(`Error in confirm lead`, err);
       return {
         status: false,
         msg: "codice OTP errato",
@@ -142,7 +143,7 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
         status: true,
       };
     } catch (err) {
-      strapi.log.error(`Error in Refresh OTP lead`);
+      strapi.log.error(`Error in Refresh OTP lead`, err);
       return {
         status: false,
         msg: "codice OTP errato",
@@ -153,118 +154,140 @@ module.exports = createCoreController(entity, ({ strapi }) => ({
   async createRefine(ctx) {
     const { body } = ctx.request;
 
-    //take id from storeName
-    const stores = await strapi.service("api::store.store").find();
-    const currentStore = stores?.results?.find(
-      (el) => el.id === body.data.store
-    );
+    try {
+      //take id from storeName
+      const stores = await strapi.service("api::store.store").find();
+      const currentStore = stores?.results?.find(
+        (el) => el.id === body.data.store
+      );
 
-    const result = await strapi.service(entity).create({
-      data: {
-        ...body.data,
-        store: currentStore?.id || null,
-        users_sales: "",
-        publishedAt: new Date(),
-      },
-    });
-    strapi.log.debug(`Lead created from cmr - ${result.id}`);
-    return result;
+      const result = await strapi.service(entity).create({
+        data: {
+          ...body.data,
+          store: currentStore?.id || null,
+          users_sales: "",
+          publishedAt: new Date(),
+        },
+      });
+      strapi.log.debug(`Lead created from cmr - ${result.id}`);
+      return result;
+    } catch (error) {
+      strapi.log.error("Error in createRefine lead", error);
+    }
   },
 
   async findRefine(ctx) {
     ctx.query = { ...ctx.query };
     let data = {};
     let meta = {};
-    const lead = await strapi.service(entity).find({ ...ctx.query });
 
-    if (lead) {
-      data = lead?.results;
-      meta = { pagination: lead?.pagination };
+    try {
+      const lead = await strapi.service(entity).find({ ...ctx.query });
+
+      if (lead) {
+        data = lead?.results;
+        meta = { pagination: lead?.pagination };
+      }
+      return { data, meta };
+    } catch (error) {
+      strapi.log.error("Error in findRefine", error);
     }
-    return { data, meta };
   },
 
   async findOneRefine(ctx) {
     const { id } = ctx.params;
     const { query } = ctx;
 
-    const lead = await strapi.service(entity).findOne(id, query);
-    const sanitizedEntity = await this.sanitizeOutput(lead, ctx);
+    try {
+      const lead = await strapi.service(entity).findOne(id, query);
+      const sanitizedEntity = await this.sanitizeOutput(lead, ctx);
 
-    return this.transformResponse(sanitizedEntity);
+      return this.transformResponse(sanitizedEntity);
+    } catch (error) {
+      strapi.log.error("Error in findOneRefine", error);
+    }
   },
 
   async updateOneRefine(ctx) {
     const { id } = ctx.params;
     const { body } = ctx.request;
 
-    //take id from storeName
-    const stores = await strapi.service("api::store.store").find();
-    const currentStore = stores?.results?.find(
-      (el) => el.id === body.data?.store?.id
-    );
+    try {
+      //take id from storeName
+      const stores = await strapi.service("api::store.store").find();
+      const currentStore = stores?.results?.find(
+        (el) => el.id === body.data?.store?.id
+      );
 
-    const currentLead = await strapi.service(entity).findOne(id, {
-      populate: ["opportunity"],
-    });
+      const currentLead = await strapi.service(entity).findOne(id, {
+        populate: ["opportunity"],
+      });
 
-    const editLead = await strapi.service(entity).update(id, {
-      data: {
-        ...body.data,
-        store: currentStore?.id || null,
-      },
-    });
+      const editLead = await strapi.service(entity).update(id, {
+        data: {
+          ...body.data,
+          store: currentStore?.id || null,
+        },
+      });
 
-    if (body?.data?.users_sales?.id) {
-      // check if opportunity exist
-      let query = {
-        populate: ["lead", "users_sales"],
-        where: {
-          lead: {
-            id: {
-              $eq: id,
+      if (body?.data?.users_sales?.id) {
+        // check if opportunity exist
+        let query = {
+          populate: ["lead", "users_sales"],
+          where: {
+            lead: {
+              id: {
+                $eq: id,
+              },
             },
           },
-        },
-      };
-      const currentOpportunity = await strapi.db
-        .query(opportunitieEntity)
-        .findOne(query);
+        };
+        const currentOpportunity = await strapi.db
+          .query(opportunitieEntity)
+          .findOne(query);
 
-      if (currentOpportunity) {
-        // update the opportunity relation
-        await strapi
-          .service(opportunitieEntity)
-          .update(currentLead?.opportunity?.id, {
+        if (currentOpportunity) {
+          // update the opportunity relation
+          await strapi
+            .service(opportunitieEntity)
+            .update(currentLead?.opportunity?.id, {
+              data: {
+                ...body.data,
+                lead: id,
+                users_sales: body?.data?.users_sales?.id,
+                // vehicles: body.data.vehicle_list || [],
+              },
+            });
+        } else {
+          // create an opportunity from lead
+          await strapi.service(opportunitieEntity).create({
             data: {
               ...body.data,
               lead: id,
-              users_sales: body?.data?.users_sales?.id,
-              // vehicles: body.data.vehicle_list || [],
+              store: currentStore?.id || null,
+              publishedAt: new Date(),
             },
           });
-      } else {
-        // create an opportunity from lead
-        await strapi.service(opportunitieEntity).create({
-          data: {
-            ...body.data,
-            lead: id,
-            store: currentStore?.id || null,
-            publishedAt: new Date(),
-          },
-        });
+        }
       }
-    }
 
-    strapi.log.debug(`Lead update from cmr - ${editLead.id}`);
-    return editLead;
+      strapi.log.debug(`Lead update from cmr - ${editLead.id}`);
+      return editLead;
+    } catch (error) {
+      strapi.log.error("Error in UpdateOneRefine lead", error);
+    }
   },
 
   async deleteOneRefine(ctx) {
     const { id } = ctx.params;
-    const lead = await strapi.service(entity).delete(id);
 
-    const sanitizedEntity = await this.sanitizeOutput(lead, ctx);
-    return this.transformResponse(sanitizedEntity);
+    try {
+      const lead = await strapi.service(entity).delete(id);
+
+      const sanitizedEntity = await this.sanitizeOutput(lead, ctx);
+      return this.transformResponse(sanitizedEntity);
+    } catch (error) {
+      strapi.log.error("Error in deleteOneRefine lead", error);
+    }
   },
 }));

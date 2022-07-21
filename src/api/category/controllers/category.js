@@ -15,11 +15,15 @@ module.exports = createCoreController(
         populate: ["vehicles"],
       };
 
-      const data = await strapi.service(entity).find({
-        ...ctx.query,
-      });
+      try {
+        const data = await strapi.service(entity).find({
+          ...ctx.query,
+        });
 
-      return data.results;
+        return data.results;
+      } catch (error) {
+        strapi.log.error(`Error in find category`, error);
+      }
     },
     async findOne(ctx) {
       const { store, slug } = ctx.params;
@@ -33,26 +37,37 @@ module.exports = createCoreController(
         populate: ["vehicles"],
       };
 
-      const data = await strapi.db.query(entity).findOne({ ...ctx.query });
-      return data;
+      try {
+        const data = await strapi.db.query(entity).findOne({ ...ctx.query });
+        return data;
+      } catch (error) {
+        strapi.log.error(`Error in findOne category`, error);
+      }
     },
     async findRefine(ctx) {
       ctx.query = { ...ctx.query, local: "en" };
 
-      const { data, meta } = await super.find(ctx);
-
-      return { data, meta };
+      try {
+        const { data, meta } = await super.find(ctx);
+        return { data, meta };
+      } catch (error) {
+        strapi.log.error(`Error in findRefine category`, error);
+      }
     },
     async findOneRefine(ctx) {
       const { id } = ctx.params;
       const { query } = ctx;
 
-      const entity = await strapi
-        .service("api::category.category")
-        .findOne(id, query);
-      const sanitizedEntity = await this.sanitizeOutput(entity, ctx);
+      try {
+        const entity = await strapi
+          .service("api::category.category")
+          .findOne(id, query);
+        const sanitizedEntity = await this.sanitizeOutput(entity, ctx);
 
-      return this.transformResponse(sanitizedEntity);
+        return this.transformResponse(sanitizedEntity);
+      } catch (error) {
+        strapi.log.error(`Error in findOneRefine category`, error);
+      }
     },
   })
 );

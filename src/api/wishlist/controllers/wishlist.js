@@ -36,35 +36,43 @@ module.exports = {
         },
         populate: ["store", "category", "make", "type", "image"],
       };
-      const vehicle = await strapi.db
-        .query(vehicleEntity)
-        .findOne({ ...ctx.query });
-      //structure vehicle object
 
-      let compose = {
-        ...vehicle,
-        make: vehicle.make ? vehicle.make.name : "",
-        type: vehicle.type ? vehicle.type.name : "",
-        category: vehicle.category ? vehicle.category.name : "",
-        store: vehicle.store ? vehicle.store.name : "",
-      };
-      return compose;
+      try {
+        const vehicle = await strapi.db
+          .query(vehicleEntity)
+          .findOne({ ...ctx.query });
+        //structure vehicle object
+        let compose = {
+          ...vehicle,
+          make: vehicle.make ? vehicle.make.name : "",
+          type: vehicle.type ? vehicle.type.name : "",
+          category: vehicle.category ? vehicle.category.name : "",
+          store: vehicle.store ? vehicle.store.name : "",
+        };
+        return compose;
+      } catch (error) {
+        strapi.log.error("Error in getVehicle wishlist", error);
+      }
     }
 
-    if (user) {
-      if (user.wishlists) {
-        await Promise.all(
-          user.wishlists.map(async (el) => {
-            let vehicle = await getVehicle(el.id);
-            wishlist.push({
-              ...vehicle,
-            });
-          })
-        );
-        return wishlist;
-      } else {
-        return wishlist;
+    try {
+      if (user) {
+        if (user.wishlists) {
+          await Promise.all(
+            user.wishlists.map(async (el) => {
+              let vehicle = await getVehicle(el.id);
+              wishlist.push({
+                ...vehicle,
+              });
+            })
+          );
+          return wishlist;
+        } else {
+          return wishlist;
+        }
       }
+    } catch (error) {
+      strapi.log.error("Error in find wishlist", error);
     }
   },
 
